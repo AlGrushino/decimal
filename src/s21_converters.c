@@ -29,7 +29,7 @@ typedef enum convert_res { OK = 1, CONVERT_ERROR = 0 } convert_res;
 проверить, что не налл, что не выходит за диапазон
 */
 int s21_from_int_to_decimal(int src, s21_decimal *dst) {
-    int res = CONVERT_ERROR;
+  int res = CONVERT_ERROR;
   if (src) {
   }
 
