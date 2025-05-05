@@ -1,6 +1,7 @@
 # Sasha
 .vscode
 *.out
+temp.c
 
 # Prerequisites
 *.d
