@@ -5,6 +5,7 @@
 int s21_check_bit(int num, int index){
     return num & (1 << index);
 }
+// нужно переделать, чтобы возвращала 0/1
 
 int s21_set_bit(int num, int index){
     return num | (1 << index);

@@ -20,6 +20,16 @@ clean:
 # s21_decimal.a: clean s21_arithmetic.o s21_comparison.o s21_converters.o s21_other.o
 # 	$(CC) $(CFLAGS) -c 
 
-test:
-	rm -rf test
+# test:
+# 	rm -rf test
 	
+
+# bit_operations
+bit_operations.a:
+	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
+	ar rcs bit_operations.a
+
+test_bit_operations:
+	rm -rf test
+	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
+	@./test
