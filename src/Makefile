@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=c11
-
 GCOV = -fprofile-arcs -ftest-coverage
 
 UNAME_S := $(shell uname -s)
@@ -22,7 +21,7 @@ clean:
 
 # test:
 # 	rm -rf test
-	
+
 
 # bit_operations
 bit_operations.a:
@@ -33,3 +32,10 @@ test_bit_operations:
 	rm -rf test
 	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
 	@./test
+
+gcov_bit_operations: test_bit_operations
+	@rm -rf test-test.gcda test-test.gcno
+	@mkdir logs
+	@gcovr --html-self-contained --html-details -o logs/report.html
+	@echo "Building report..."
+	@open logs/report.html
