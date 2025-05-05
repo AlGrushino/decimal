@@ -12,7 +12,11 @@ ifeq ($(UNAME_S), Darwin)
     CLIBS=-lcheck -lm
 endif
 
-all: s21_decimal.a
+all: bit_operations.a
+
+bit_operations.a:
+	$(CC) $(CFLAGS) -c bit_operations.c
+	ar rcs bit_operations.a
 
 clean:
 	@rm -rf *.o *.gcno *.gcda *.gcov *.a test logs
@@ -22,4 +26,5 @@ clean:
 
 test:
 	rm -rf test
+	@$(CC) $(CFLAGS) $(GCOV) test.c bit_operations.c $(CLIBS) -o test
 	
