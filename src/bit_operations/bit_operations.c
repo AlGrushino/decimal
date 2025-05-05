@@ -82,3 +82,33 @@ s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index){
     decimal.bits[index/MAX_BITS] = s21_unset_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
     return decimal;
 }
+
+/*
+@brief Выключает нерабочие биты(0 - 15) в последнем байте decimal 
+
+@param decimal
+@return s21_decimal
+*/
+s21_decimal s21_set_zero_15(s21_decimal decimal){
+    for (size_t i = 0; i < 16; i++)
+    {
+        s21_set_bit(decimal.bits[3], (int)i);
+    }
+
+    return decimal;    
+}
+
+/*
+@brief Выключает нерабочие биты(24 - 30) в последнем байте decimal 
+
+@param decimal
+@return s21_decimal
+*/
+s21_decimal s21_set_zero_30(s21_decimal decimal){
+    for (size_t i = 24; i < 31; i++)
+    {
+        s21_set_bit(decimal.bits[3], (int)i);
+    }
+
+    return decimal;    
+}
