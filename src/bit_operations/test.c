@@ -516,7 +516,7 @@ START_TEST(s21_decimal_set_bit_4) {
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
     num = s21_decimal_set_bit(num, diff + bit);
-    ck_assert_int_eq(num.bits[0], res);
+    ck_assert_int_eq(num.bits[1], res);
 
     bit++;
     res *= 2;

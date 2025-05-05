@@ -29,7 +29,7 @@ bit_operations.a:
 	ar rcs bit_operations.a
 
 test_bit_operations:
-	rm -rf test
+	@rm -rf test
 	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
 	@./test
 
