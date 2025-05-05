@@ -13,7 +13,7 @@
 в инте 4 байта, 1 байт - 8 бит, всего 8 бит x 4 байта = 32 бита
 в 4 интах 32 бита x 4 = 128 бит
 */
-typedef struct {
+typedef struct s21_decimal {
   int bits[4];
 } s21_decimal;
 
