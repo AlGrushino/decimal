@@ -356,6 +356,46 @@ ck_assert_int_eq(res, 0);
 }
 END_TEST
 
+// s21_set_bit
+START_TEST(set_bit_1) {
+  int num = 0;
+  num = s21_set_bit(num, 0);
+
+ck_assert_int_eq(num, 1);
+}
+END_TEST
+
+START_TEST(set_bit_2) {
+  int res = 2;
+  for (size_t i = 1; i < 8; i++)
+  {
+    int num = 0;
+    num = s21_set_bit(num, i);
+    ck_assert_int_eq(res, num);
+    res *= 2;
+  }
+}
+END_TEST
+
+// граничные значения
+// тут всё оч сложно, эти тесты не нужны, но ты оставил их, чтобы не афигеть, когда увидишь, что граничные значения не протестированы
+// смотри, что пихаешь в функцию
+START_TEST(set_bit_3) {
+  int num = 0;
+  num = s21_set_bit(num, 1);
+
+ck_assert_int_eq(num, 2);
+}
+END_TEST
+
+START_TEST(set_bit_4) {
+  int num = 0;
+  num = s21_set_bit(num, -1);
+
+ck_assert_int_eq(num, -2147483648);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -403,6 +443,12 @@ tcase_add_test(tc1_1, check_bit_32);
 tcase_add_test(tc1_1, check_bit_33);
 tcase_add_test(tc1_1, check_bit_34);
 
+// s21_set_bit
+tcase_add_test(tc1_1, set_bit_1);
+tcase_add_test(tc1_1, set_bit_2);
+// граничные значения
+tcase_add_test(tc1_1, set_bit_3);
+tcase_add_test(tc1_1, set_bit_4);
 
 
 

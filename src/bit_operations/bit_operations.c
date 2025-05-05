@@ -1,10 +1,16 @@
 #include "bit_operations.h"
 /*
+@breif проверяет, включён ли бит в num по index
 Сдвиг работает таким образом, что зануляются все биты слева и справа от индекса
+
+@param num int
+@param index int индекс бита
+@return результат проверки 1 - включён, 0 - выключен
+Если пихать индекс вне диапазона, возвращает 0
 */
 int s21_check_bit(int num, int index){
     int res = 0;
-    
+
     num = num & (1 << index);
     if (num)
     {
@@ -13,8 +19,14 @@ int s21_check_bit(int num, int index){
     
     return res;
 }
-// нужно переделать, чтобы возвращала 0/1
 
+/*
+@brief включает бит в num по index
+
+@param num int
+@param index int индекс бита
+@return число с включённым битом
+*/
 int s21_set_bit(int num, int index){
     return num | (1 << index);
 }
