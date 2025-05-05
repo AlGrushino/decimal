@@ -396,6 +396,86 @@ ck_assert_int_eq(num, -2147483648);
 }
 END_TEST
 
+// s21_unset_bit
+// нужный бит включён
+START_TEST(unset_bit_1) {
+  int num = 1;
+  num = s21_unset_bit(num, 0);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_2) {
+  int num = 2;
+  num = s21_unset_bit(num, 1);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_3) {
+  int num = 4;
+  num = s21_unset_bit(num, 2);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_4) {
+  int num = 8;
+  num = s21_unset_bit(num, 3);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_5) {
+  int num = 16;
+  num = s21_unset_bit(num, 4);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_6) {
+  int num = 32;
+  num = s21_unset_bit(num, 5);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_7) {
+  int num = 64;
+  num = s21_unset_bit(num, 6);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+START_TEST(unset_bit_8) {
+  int num = 128;
+  num = s21_unset_bit(num, 7);
+
+ck_assert_int_eq(num, 0);
+}
+END_TEST
+
+// бит выключен
+START_TEST(unset_bit_9) {
+  
+  for (size_t i = 0; i < 8; i++)
+  {
+    int num = 0;
+    num = s21_unset_bit(num, i);
+    ck_assert_int_eq(num, 0);
+
+  }
+}
+END_TEST
+
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -450,6 +530,17 @@ tcase_add_test(tc1_1, set_bit_2);
 tcase_add_test(tc1_1, set_bit_3);
 tcase_add_test(tc1_1, set_bit_4);
 
+// s21_unset_bit
+tcase_add_test(tc1_1, unset_bit_1);
+tcase_add_test(tc1_1, unset_bit_2);
+tcase_add_test(tc1_1, unset_bit_3);
+tcase_add_test(tc1_1, unset_bit_4);
+tcase_add_test(tc1_1, unset_bit_5);
+tcase_add_test(tc1_1, unset_bit_6);
+tcase_add_test(tc1_1, unset_bit_7);
+tcase_add_test(tc1_1, unset_bit_8);
+// нужный бит выключен
+tcase_add_test(tc1_1, unset_bit_9);
 
 
 
