@@ -85,6 +85,87 @@ START_TEST(check_bit_8) {
 }
 END_TEST
 
+// все биты выключены
+START_TEST(check_bit_9) {
+  // 0000 0001
+  int num = 0;
+  int index = 0;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_10) {
+  // 0000 0010
+  int num = 0;
+  int index = 1;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_11) {
+  // 0000 0100
+  int num = 0;
+  int index = 2;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_12) {
+  // 0000 1000
+  int num = 0;
+  int index = 3;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_13) {
+  // 0001 0000
+  int num = 0;
+  int index = 4;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_14) {
+  // 0010 0000
+  int num = 0;
+  int index = 5;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_15) {
+  // 0100 0000
+  int num = 0;
+  int index = 6;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(check_bit_16) {
+  // 1000 0000
+  int num = 0;
+  int index = 7;
+  int res = s21_check_bit(num, index);
+
+ck_assert_int_eq(res, 0);
+}
+END_TEST
+
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -102,6 +183,16 @@ int main(void) {
   tcase_add_test(tc1_1, check_bit_6);
   tcase_add_test(tc1_1, check_bit_7);
   tcase_add_test(tc1_1, check_bit_8);
+// все биты выключены
+tcase_add_test(tc1_1, check_bit_9);
+tcase_add_test(tc1_1, check_bit_10);
+tcase_add_test(tc1_1, check_bit_11);
+tcase_add_test(tc1_1, check_bit_12);
+tcase_add_test(tc1_1, check_bit_13);
+tcase_add_test(tc1_1, check_bit_14);
+tcase_add_test(tc1_1, check_bit_15);
+tcase_add_test(tc1_1, check_bit_16);
+
 
 
 
