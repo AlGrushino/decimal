@@ -5,80 +5,80 @@
 // s21_check_bit
 // нужные биты включены
 START_TEST(check_bit_1) {
-    // 0000 0001
-    int num = 1;
-    int index = 0;
-    int res = s21_check_bit(num, index);
+  // 0000 0001
+  int num = 1;
+  int index = 0;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_2) {
-    // 0000 0010
-    int num = 2;
-    int index = 1;
-    int res = s21_check_bit(num, index);
+  // 0000 0010
+  int num = 2;
+  int index = 1;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_3) {
-    // 0000 0100
-    int num = 4;
-    int index = 2;
-    int res = s21_check_bit(num, index);
+  // 0000 0100
+  int num = 4;
+  int index = 2;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_4) {
-    // 0000 1000
-    int num = 8;
-    int index = 3;
-    int res = s21_check_bit(num, index);
+  // 0000 1000
+  int num = 8;
+  int index = 3;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_5) {
-    // 0001 0000
-    int num = 16;
-    int index = 4;
-    int res = s21_check_bit(num, index);
+  // 0001 0000
+  int num = 16;
+  int index = 4;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_6) {
-    // 0010 0000
-    int num = 32;
-    int index = 5;
-    int res = s21_check_bit(num, index);
+  // 0010 0000
+  int num = 32;
+  int index = 5;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_7) {
-    // 0100 0000
-    int num = 64;
-    int index = 6;
-    int res = s21_check_bit(num, index);
+  // 0100 0000
+  int num = 64;
+  int index = 6;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
 END_TEST
 
 START_TEST(check_bit_8) {
-    // 1000 0000
-    int num = 128;
-    int index = 7;
-    int res = s21_check_bit(num, index);
+  // 1000 0000
+  int num = 128;
+  int index = 7;
+  int res = s21_check_bit(num, index);
 
   ck_assert_int_eq(res, 1);
 }
@@ -91,7 +91,7 @@ START_TEST(check_bit_9) {
   int index = 0;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -101,7 +101,7 @@ START_TEST(check_bit_10) {
   int index = 1;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -111,7 +111,7 @@ START_TEST(check_bit_11) {
   int index = 2;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -121,7 +121,7 @@ START_TEST(check_bit_12) {
   int index = 3;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -131,7 +131,7 @@ START_TEST(check_bit_13) {
   int index = 4;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -141,7 +141,7 @@ START_TEST(check_bit_14) {
   int index = 5;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -151,7 +151,7 @@ START_TEST(check_bit_15) {
   int index = 6;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -161,7 +161,7 @@ START_TEST(check_bit_16) {
   int index = 7;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -172,7 +172,7 @@ START_TEST(check_bit_17) {
   int index = 0;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -182,7 +182,7 @@ START_TEST(check_bit_18) {
   int index = 1;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -192,7 +192,7 @@ START_TEST(check_bit_19) {
   int index = 2;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -202,7 +202,7 @@ START_TEST(check_bit_20) {
   int index = 3;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -212,7 +212,7 @@ START_TEST(check_bit_21) {
   int index = 4;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -222,7 +222,7 @@ START_TEST(check_bit_22) {
   int index = 5;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -232,7 +232,7 @@ START_TEST(check_bit_23) {
   int index = 6;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -242,7 +242,7 @@ START_TEST(check_bit_24) {
   int index = 7;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -254,7 +254,7 @@ START_TEST(check_bit_25) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -265,7 +265,7 @@ START_TEST(check_bit_26) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -276,7 +276,7 @@ START_TEST(check_bit_27) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -287,7 +287,7 @@ START_TEST(check_bit_28) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -298,7 +298,7 @@ START_TEST(check_bit_29) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -309,7 +309,7 @@ START_TEST(check_bit_30) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -320,7 +320,7 @@ START_TEST(check_bit_31) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -331,7 +331,7 @@ START_TEST(check_bit_32) {
   num = ~num;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -342,7 +342,7 @@ START_TEST(check_bit_33) {
   int index = 8;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -352,7 +352,7 @@ START_TEST(check_bit_34) {
   int index = -1;
   int res = s21_check_bit(num, index);
 
-ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 0);
 }
 END_TEST
 
@@ -361,14 +361,13 @@ START_TEST(set_bit_1) {
   int num = 0;
   num = s21_set_bit(num, 0);
 
-ck_assert_int_eq(num, 1);
+  ck_assert_int_eq(num, 1);
 }
 END_TEST
 
 START_TEST(set_bit_2) {
   int res = 2;
-  for (size_t i = 1; i < 8; i++)
-  {
+  for (size_t i = 1; i < 8; i++) {
     int num = 0;
     num = s21_set_bit(num, i);
     ck_assert_int_eq(res, num);
@@ -378,13 +377,14 @@ START_TEST(set_bit_2) {
 END_TEST
 
 // граничные значения
-// тут всё оч сложно, эти тесты не нужны, но ты оставил их, чтобы не афигеть, когда увидишь, что граничные значения не протестированы
-// смотри, что пихаешь в функцию
+// тут всё оч сложно, эти тесты не нужны, но ты оставил их, чтобы не афигеть,
+// когда увидишь, что граничные значения не протестированы смотри, что пихаешь в
+// функцию
 START_TEST(set_bit_3) {
   int num = 0;
   num = s21_set_bit(num, 1);
 
-ck_assert_int_eq(num, 2);
+  ck_assert_int_eq(num, 2);
 }
 END_TEST
 
@@ -392,7 +392,7 @@ START_TEST(set_bit_4) {
   int num = 0;
   num = s21_set_bit(num, -1);
 
-ck_assert_int_eq(num, -2147483648);
+  ck_assert_int_eq(num, -2147483648);
 }
 END_TEST
 
@@ -402,7 +402,7 @@ START_TEST(unset_bit_1) {
   int num = 1;
   num = s21_unset_bit(num, 0);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -410,7 +410,7 @@ START_TEST(unset_bit_2) {
   int num = 2;
   num = s21_unset_bit(num, 1);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -418,7 +418,7 @@ START_TEST(unset_bit_3) {
   int num = 4;
   num = s21_unset_bit(num, 2);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -426,7 +426,7 @@ START_TEST(unset_bit_4) {
   int num = 8;
   num = s21_unset_bit(num, 3);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -434,7 +434,7 @@ START_TEST(unset_bit_5) {
   int num = 16;
   num = s21_unset_bit(num, 4);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -442,7 +442,7 @@ START_TEST(unset_bit_6) {
   int num = 32;
   num = s21_unset_bit(num, 5);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -450,7 +450,7 @@ START_TEST(unset_bit_7) {
   int num = 64;
   num = s21_unset_bit(num, 6);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
@@ -458,23 +458,19 @@ START_TEST(unset_bit_8) {
   int num = 128;
   num = s21_unset_bit(num, 7);
 
-ck_assert_int_eq(num, 0);
+  ck_assert_int_eq(num, 0);
 }
 END_TEST
 
 // бит выключен
 START_TEST(unset_bit_9) {
-  
-  for (size_t i = 0; i < 8; i++)
-  {
+  for (size_t i = 0; i < 8; i++) {
     int num = 0;
     num = s21_unset_bit(num, i);
     ck_assert_int_eq(num, 0);
-
   }
 }
 END_TEST
-
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -482,8 +478,8 @@ int main(void) {
   SRunner *sr = srunner_create(s1);
   suite_add_tcase(s1, tc1_1);
 
-//   s21_check_bit
-// нужные биты включены
+  //   s21_check_bit
+  // нужные биты включены
   tcase_add_test(tc1_1, check_bit_1);
   tcase_add_test(tc1_1, check_bit_2);
   tcase_add_test(tc1_1, check_bit_3);
@@ -492,59 +488,55 @@ int main(void) {
   tcase_add_test(tc1_1, check_bit_6);
   tcase_add_test(tc1_1, check_bit_7);
   tcase_add_test(tc1_1, check_bit_8);
-// все биты выключены
-tcase_add_test(tc1_1, check_bit_9);
-tcase_add_test(tc1_1, check_bit_10);
-tcase_add_test(tc1_1, check_bit_11);
-tcase_add_test(tc1_1, check_bit_12);
-tcase_add_test(tc1_1, check_bit_13);
-tcase_add_test(tc1_1, check_bit_14);
-tcase_add_test(tc1_1, check_bit_15);
-tcase_add_test(tc1_1, check_bit_16);
-// все биты выключены
-tcase_add_test(tc1_1, check_bit_17);
-tcase_add_test(tc1_1, check_bit_18);
-tcase_add_test(tc1_1, check_bit_19);
-tcase_add_test(tc1_1, check_bit_20);
-tcase_add_test(tc1_1, check_bit_21);
-tcase_add_test(tc1_1, check_bit_22);
-tcase_add_test(tc1_1, check_bit_23);
-tcase_add_test(tc1_1, check_bit_24);
-// нужные биты выключены
-tcase_add_test(tc1_1, check_bit_25);
-tcase_add_test(tc1_1, check_bit_26);
-tcase_add_test(tc1_1, check_bit_27);
-tcase_add_test(tc1_1, check_bit_28);
-tcase_add_test(tc1_1, check_bit_29);
-tcase_add_test(tc1_1, check_bit_30);
-tcase_add_test(tc1_1, check_bit_31);
-tcase_add_test(tc1_1, check_bit_32);
-// граничные значения
-tcase_add_test(tc1_1, check_bit_33);
-tcase_add_test(tc1_1, check_bit_34);
+  // все биты выключены
+  tcase_add_test(tc1_1, check_bit_9);
+  tcase_add_test(tc1_1, check_bit_10);
+  tcase_add_test(tc1_1, check_bit_11);
+  tcase_add_test(tc1_1, check_bit_12);
+  tcase_add_test(tc1_1, check_bit_13);
+  tcase_add_test(tc1_1, check_bit_14);
+  tcase_add_test(tc1_1, check_bit_15);
+  tcase_add_test(tc1_1, check_bit_16);
+  // все биты выключены
+  tcase_add_test(tc1_1, check_bit_17);
+  tcase_add_test(tc1_1, check_bit_18);
+  tcase_add_test(tc1_1, check_bit_19);
+  tcase_add_test(tc1_1, check_bit_20);
+  tcase_add_test(tc1_1, check_bit_21);
+  tcase_add_test(tc1_1, check_bit_22);
+  tcase_add_test(tc1_1, check_bit_23);
+  tcase_add_test(tc1_1, check_bit_24);
+  // нужные биты выключены
+  tcase_add_test(tc1_1, check_bit_25);
+  tcase_add_test(tc1_1, check_bit_26);
+  tcase_add_test(tc1_1, check_bit_27);
+  tcase_add_test(tc1_1, check_bit_28);
+  tcase_add_test(tc1_1, check_bit_29);
+  tcase_add_test(tc1_1, check_bit_30);
+  tcase_add_test(tc1_1, check_bit_31);
+  tcase_add_test(tc1_1, check_bit_32);
+  // граничные значения
+  tcase_add_test(tc1_1, check_bit_33);
+  tcase_add_test(tc1_1, check_bit_34);
 
-// s21_set_bit
-tcase_add_test(tc1_1, set_bit_1);
-tcase_add_test(tc1_1, set_bit_2);
-// граничные значения
-tcase_add_test(tc1_1, set_bit_3);
-tcase_add_test(tc1_1, set_bit_4);
+  // s21_set_bit
+  tcase_add_test(tc1_1, set_bit_1);
+  tcase_add_test(tc1_1, set_bit_2);
+  // граничные значения
+  tcase_add_test(tc1_1, set_bit_3);
+  tcase_add_test(tc1_1, set_bit_4);
 
-// s21_unset_bit
-tcase_add_test(tc1_1, unset_bit_1);
-tcase_add_test(tc1_1, unset_bit_2);
-tcase_add_test(tc1_1, unset_bit_3);
-tcase_add_test(tc1_1, unset_bit_4);
-tcase_add_test(tc1_1, unset_bit_5);
-tcase_add_test(tc1_1, unset_bit_6);
-tcase_add_test(tc1_1, unset_bit_7);
-tcase_add_test(tc1_1, unset_bit_8);
-// нужный бит выключен
-tcase_add_test(tc1_1, unset_bit_9);
-
-
-
-
+  // s21_unset_bit
+  tcase_add_test(tc1_1, unset_bit_1);
+  tcase_add_test(tc1_1, unset_bit_2);
+  tcase_add_test(tc1_1, unset_bit_3);
+  tcase_add_test(tc1_1, unset_bit_4);
+  tcase_add_test(tc1_1, unset_bit_5);
+  tcase_add_test(tc1_1, unset_bit_6);
+  tcase_add_test(tc1_1, unset_bit_7);
+  tcase_add_test(tc1_1, unset_bit_8);
+  // нужный бит выключен
+  tcase_add_test(tc1_1, unset_bit_9);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

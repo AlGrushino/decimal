@@ -8,16 +8,15 @@
 @return результат проверки 1 - включён, 0 - выключен
 Если пихать индекс вне диапазона, возвращает 0
 */
-int s21_check_bit(int num, int index){
-    int res = 0;
+int s21_check_bit(int num, int index) {
+  int res = 0;
 
-    num = num & (1 << index);
-    if (num)
-    {
-        res = 1;
-    }
-    
-    return res;
+  num = num & (1 << index);
+  if (num) {
+    res = 1;
+  }
+
+  return res;
 }
 
 /*
@@ -27,9 +26,7 @@ int s21_check_bit(int num, int index){
 @param index int индекс бита
 @return число с включённым битом
 */
-int s21_set_bit(int num, int index){
-    return num | (1 << index);
-}
+int s21_set_bit(int num, int index) { return num | (1 << index); }
 
 /*
 @brief выключает бит в num по index
@@ -42,9 +39,7 @@ bits = 1111 1110
 @param index int индекс бита
 @return число с выключенным битом
 */
-int s21_unset_bit(int num, int index){
-    return num & (~(1 << index));
-}
+int s21_unset_bit(int num, int index) { return num & (~(1 << index)); }
 
 /*
 @brief Проверяет, включён ли бит по index в decimal
@@ -53,9 +48,9 @@ int s21_unset_bit(int num, int index){
 @param index идндекс бита, который провеярем
 @return результат проверки, 1 - включён, 0 - выключен
 */
-int s21_decimal_check_bit(s21_decimal decimal, int index){
-    int res = s21_check_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
-    return res;
+int s21_decimal_check_bit(s21_decimal decimal, int index) {
+  int res = s21_check_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
+  return res;
 }
 
 /*
@@ -65,9 +60,10 @@ int s21_decimal_check_bit(s21_decimal decimal, int index){
 @param index int - индекс бита, который включаем
 @return s21_decimal число decimal с включённым битом
 */
-s21_decimal s21_decimal_set_bit(s21_decimal decimal, int index){
-    decimal.bits[index / MAX_BITS] = s21_set_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
-    return decimal;
+s21_decimal s21_decimal_set_bit(s21_decimal decimal, int index) {
+  decimal.bits[index / MAX_BITS] =
+      s21_set_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
+  return decimal;
 }
 // Надо подумать, что возвращать из сет/ансет
 
@@ -78,37 +74,36 @@ s21_decimal s21_decimal_set_bit(s21_decimal decimal, int index){
 @param index int индекс бита, который выключаем
 @return s21_decimal число decimal с выключенным битом
 */
-s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index){
-    decimal.bits[index/MAX_BITS] = s21_unset_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
-    return decimal;
+s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index) {
+  decimal.bits[index / MAX_BITS] =
+      s21_unset_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
+  return decimal;
 }
 
 /*
-@brief Выключает нерабочие биты(0 - 15) в последнем байте decimal 
+@brief Выключает нерабочие биты(0 - 15) в последнем байте decimal
 
 @param decimal
 @return s21_decimal
 */
-s21_decimal s21_set_zero_15(s21_decimal decimal){
-    for (size_t i = 0; i < 16; i++)
-    {
-        s21_set_bit(decimal.bits[3], (int)i);
-    }
+s21_decimal s21_set_zero_15(s21_decimal decimal) {
+  for (size_t i = 0; i < 16; i++) {
+    s21_set_bit(decimal.bits[3], (int)i);
+  }
 
-    return decimal;    
+  return decimal;
 }
 
 /*
-@brief Выключает нерабочие биты(24 - 30) в последнем байте decimal 
+@brief Выключает нерабочие биты(24 - 30) в последнем байте decimal
 
 @param decimal
 @return s21_decimal
 */
-s21_decimal s21_set_zero_30(s21_decimal decimal){
-    for (size_t i = 24; i < 31; i++)
-    {
-        s21_set_bit(decimal.bits[3], (int)i);
-    }
+s21_decimal s21_set_zero_30(s21_decimal decimal) {
+  for (size_t i = 24; i < 31; i++) {
+    s21_set_bit(decimal.bits[3], (int)i);
+  }
 
-    return decimal;    
+  return decimal;
 }
