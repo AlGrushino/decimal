@@ -472,6 +472,46 @@ START_TEST(unset_bit_9) {
 }
 END_TEST
 
+// s21_decimal_set_bit
+// бит выключен
+// первый бит
+START_TEST(s21_decimal_set_bit_1) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 0);
+
+  ck_assert_int_eq(num.bits[0], 1);
+}
+END_TEST
+
+START_TEST(s21_decimal_set_bit_2) {
+  int res = 2;
+  int bit = 1;
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    num = s21_decimal_set_bit(num, bit);
+    ck_assert_int_eq(num.bits[0], res);
+
+    bit++;
+    res *= 2;
+  }
+}
+END_TEST
+
+// второй бит
+START_TEST(s21_decimal_set_bit_3) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  int diff = 8;
+  num = s21_decimal_set_bit(num, diff + 0);
+
+  printf("%d %d %d %d\n", num.bits[0], num.bits[1], num.bits[2], num.bits[3]);
+
+  ck_assert_int_eq(num.bits[1], 1);
+}
+END_TEST
+
+// бит включён
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -537,6 +577,12 @@ int main(void) {
   tcase_add_test(tc1_1, unset_bit_8);
   // нужный бит выключен
   tcase_add_test(tc1_1, unset_bit_9);
+
+  // s21_decimal_set_bit
+  // бит выключен
+  tcase_add_test(tc1_1, s21_decimal_set_bit_1);
+  tcase_add_test(tc1_1, s21_decimal_set_bit_2);
+  tcase_add_test(tc1_1, s21_decimal_set_bit_3);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
