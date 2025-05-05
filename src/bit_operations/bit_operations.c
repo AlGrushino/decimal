@@ -3,7 +3,15 @@
 Сдвиг работает таким образом, что зануляются все биты слева и справа от индекса
 */
 int s21_check_bit(int num, int index){
-    return num & (1 << index);
+    int res = 0;
+    
+    num = num & (1 << index);
+    if (num)
+    {
+        res = 1;
+    }
+    
+    return res;
 }
 // нужно переделать, чтобы возвращала 0/1
 

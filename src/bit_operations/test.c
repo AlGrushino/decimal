@@ -21,7 +21,7 @@ START_TEST(check_bit_2) {
     int index = 1;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 2);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -31,7 +31,7 @@ START_TEST(check_bit_3) {
     int index = 2;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 4);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -41,7 +41,7 @@ START_TEST(check_bit_4) {
     int index = 3;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 8);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -51,7 +51,7 @@ START_TEST(check_bit_5) {
     int index = 4;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 16);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -61,7 +61,7 @@ START_TEST(check_bit_6) {
     int index = 5;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 32);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -71,7 +71,7 @@ START_TEST(check_bit_7) {
     int index = 6;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 64);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -81,7 +81,7 @@ START_TEST(check_bit_8) {
     int index = 7;
     int res = s21_check_bit(num, index);
 
-  ck_assert_int_eq(res, 128);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
