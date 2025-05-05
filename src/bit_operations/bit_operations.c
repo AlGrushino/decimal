@@ -32,10 +32,15 @@ int s21_set_bit(int num, int index){
 }
 
 /*
+@brief выключает бит в num по index
 ~ инвертирует биты
 bits = 0000 0001
 ~bits
 bits = 1111 1110
+
+@param num int
+@param index int индекс бита
+@return число с выключенным битом
 */
 int s21_unset_bit(int num, int index){
     return num & (~(1 << index));
