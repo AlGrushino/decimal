@@ -1,1 +1,1 @@
-#include "s21_decimal.h"
+#include "s21_other.h"
