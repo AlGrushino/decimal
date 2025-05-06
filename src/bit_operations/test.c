@@ -704,6 +704,33 @@ START_TEST(s21_decimal_check_bit_6) {
 }
 END_TEST
 
+// бит включён
+// первый байт
+START_TEST(s21_decimal_check_bit_7) {
+  s21_decimal num = {{1, 0, 0, 0}};
+  int res = s21_decimal_check_bit(num, 0);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_decimal_check_bit_8) {
+  int bit = 2;
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    s21_decimal_set_bit(num, i);
+    printf("byte1 = %d byte2 = %d byte3 = %d\n", num.bits[0], num.bits[1], num.bits[2]);
+    ck_assert_int_eq(num.bits[0], bit);
+    
+    int res = s21_decimal_check_bit(num, i);
+    ck_assert_int_eq(res, 1);
+
+    bit *= 2;
+  }
+
+}
+END_TEST
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -790,12 +817,17 @@ int main(void) {
   tcase_add_test(tc1_1, s21_decimal_unset_bit_6);
 
   // s21_decimal_check_bit
+  // бит выключен
   tcase_add_test(tc1_1, s21_decimal_check_bit_1);
   tcase_add_test(tc1_1, s21_decimal_check_bit_2);
   tcase_add_test(tc1_1, s21_decimal_check_bit_3);
   tcase_add_test(tc1_1, s21_decimal_check_bit_4);
   tcase_add_test(tc1_1, s21_decimal_check_bit_5);
   tcase_add_test(tc1_1, s21_decimal_check_bit_6);
+
+  // бит включён
+  tcase_add_test(tc1_1, s21_decimal_check_bit_7);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_8);
 
 
 
