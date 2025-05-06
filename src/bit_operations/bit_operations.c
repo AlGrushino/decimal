@@ -49,7 +49,10 @@ int s21_unset_bit(int num, int index) { return num & (~(1 << index)); }
 @return результат проверки, 1 - включён, 0 - выключен
 */
 int s21_decimal_check_bit(s21_decimal decimal, int index) {
-  int res = s21_check_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
+  int byte = index / MAX_BITS;
+  int bit = index % MAX_BITS;
+  int res = s21_check_bit(decimal.bits[byte], bit);
+
   return res;
 }
 

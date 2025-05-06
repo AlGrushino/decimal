@@ -638,6 +638,72 @@ START_TEST(s21_decimal_unset_bit_6) {
 }
 END_TEST
 
+// s21_decimal_check_bit
+// все биты выключены
+// первый байт
+START_TEST(s21_decimal_check_bit_1) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  int res = s21_decimal_check_bit(num, 0);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_decimal_check_bit_2) {
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    int res = s21_decimal_check_bit(num, i);
+    ck_assert_int_eq(res, 0);
+
+  }
+}
+END_TEST
+
+// второй байт
+START_TEST(s21_decimal_check_bit_3) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  int diff = 32;
+  int res = s21_decimal_check_bit(num, diff + 0);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_decimal_check_bit_4) {
+  int diff = 32;
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 0);
+
+  }
+}
+END_TEST
+
+// третий байт
+START_TEST(s21_decimal_check_bit_5) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  int diff = 64;
+  int res = s21_decimal_check_bit(num, diff + 0);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_decimal_check_bit_6) {
+  int diff = 64;
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 0);
+
+  }
+}
+END_TEST
+
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -722,6 +788,17 @@ int main(void) {
   tcase_add_test(tc1_1, s21_decimal_unset_bit_4);
   tcase_add_test(tc1_1, s21_decimal_unset_bit_5);
   tcase_add_test(tc1_1, s21_decimal_unset_bit_6);
+
+  // s21_decimal_check_bit
+  tcase_add_test(tc1_1, s21_decimal_check_bit_1);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_2);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_3);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_4);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_5);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_6);
+
+
+
 
 
   srunner_set_fork_status(sr, CK_NOFORK);
