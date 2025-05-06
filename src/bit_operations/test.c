@@ -719,8 +719,7 @@ START_TEST(s21_decimal_check_bit_8) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    s21_decimal_set_bit(num, i);
-    printf("byte1 = %d byte2 = %d byte3 = %d\n", num.bits[0], num.bits[1], num.bits[2]);
+    num = s21_decimal_set_bit(num, i);
     ck_assert_int_eq(num.bits[0], bit);
     
     int res = s21_decimal_check_bit(num, i);
@@ -731,6 +730,63 @@ START_TEST(s21_decimal_check_bit_8) {
 
 }
 END_TEST
+
+// второй байт
+START_TEST(s21_decimal_check_bit_9) {
+  s21_decimal num = {{0, 1, 0, 0}};
+  int diff = 32;
+  int res = s21_decimal_check_bit(num, diff + 0);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_decimal_check_bit_10) {
+  int bit = 2;
+  int diff = 32;
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    num = s21_decimal_set_bit(num, diff + i);
+    ck_assert_int_eq(num.bits[1], bit);
+    
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 1);
+
+    bit *= 2;
+  }
+
+}
+END_TEST
+
+// третий байт
+START_TEST(s21_decimal_check_bit_11) {
+  s21_decimal num = {{0, 0, 1, 0}};
+  int diff = 64;
+  int res = s21_decimal_check_bit(num, diff + 0);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_decimal_check_bit_12) {
+  int bit = 2;
+  int diff = 64;
+
+  for (size_t i = 1; i < 8; i++) {
+    s21_decimal num = {{0, 0, 0, 0}};
+    num = s21_decimal_set_bit(num, diff + i);
+    ck_assert_int_eq(num.bits[2], bit);
+    
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 1);
+
+    bit *= 2;
+  }
+
+}
+END_TEST
+
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -828,6 +884,10 @@ int main(void) {
   // бит включён
   tcase_add_test(tc1_1, s21_decimal_check_bit_7);
   tcase_add_test(tc1_1, s21_decimal_check_bit_8);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_9);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_10);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_11);
+  tcase_add_test(tc1_1, s21_decimal_check_bit_12);
 
 
 
