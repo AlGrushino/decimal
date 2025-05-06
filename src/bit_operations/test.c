@@ -1015,8 +1015,8 @@ int main(void) {
 
   // s21_set_zero_30
   // биты включены
-  // биты выключены
   tcase_add_test(tc1_1, s21_set_zero_30_1);
+  // биты выключены
   tcase_add_test(tc1_1, s21_set_zero_30_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
