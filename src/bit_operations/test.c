@@ -650,12 +650,10 @@ START_TEST(s21_decimal_check_bit_1) {
 END_TEST
 
 START_TEST(s21_decimal_check_bit_2) {
-
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
     int res = s21_decimal_check_bit(num, i);
     ck_assert_int_eq(res, 0);
-
   }
 }
 END_TEST
@@ -677,7 +675,6 @@ START_TEST(s21_decimal_check_bit_4) {
     s21_decimal num = {{0, 0, 0, 0}};
     int res = s21_decimal_check_bit(num, diff + i);
     ck_assert_int_eq(res, 0);
-
   }
 }
 END_TEST
@@ -699,7 +696,6 @@ START_TEST(s21_decimal_check_bit_6) {
     s21_decimal num = {{0, 0, 0, 0}};
     int res = s21_decimal_check_bit(num, diff + i);
     ck_assert_int_eq(res, 0);
-
   }
 }
 END_TEST
@@ -721,13 +717,12 @@ START_TEST(s21_decimal_check_bit_8) {
     s21_decimal num = {{0, 0, 0, 0}};
     num = s21_decimal_set_bit(num, i);
     ck_assert_int_eq(num.bits[0], bit);
-    
+
     int res = s21_decimal_check_bit(num, i);
     ck_assert_int_eq(res, 1);
 
     bit *= 2;
   }
-
 }
 END_TEST
 
@@ -749,13 +744,12 @@ START_TEST(s21_decimal_check_bit_10) {
     s21_decimal num = {{0, 0, 0, 0}};
     num = s21_decimal_set_bit(num, diff + i);
     ck_assert_int_eq(num.bits[1], bit);
-    
+
     int res = s21_decimal_check_bit(num, diff + i);
     ck_assert_int_eq(res, 1);
 
     bit *= 2;
   }
-
 }
 END_TEST
 
@@ -777,16 +771,14 @@ START_TEST(s21_decimal_check_bit_12) {
     s21_decimal num = {{0, 0, 0, 0}};
     num = s21_decimal_set_bit(num, diff + i);
     ck_assert_int_eq(num.bits[2], bit);
-    
+
     int res = s21_decimal_check_bit(num, diff + i);
     ck_assert_int_eq(res, 1);
 
     bit *= 2;
   }
-
 }
 END_TEST
-
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -888,10 +880,6 @@ int main(void) {
   tcase_add_test(tc1_1, s21_decimal_check_bit_10);
   tcase_add_test(tc1_1, s21_decimal_check_bit_11);
   tcase_add_test(tc1_1, s21_decimal_check_bit_12);
-
-
-
-
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
