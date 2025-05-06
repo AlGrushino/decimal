@@ -77,8 +77,10 @@ s21_decimal s21_decimal_set_bit(s21_decimal decimal, int index) {
 @return s21_decimal число decimal с выключенным битом
 */
 s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index) {
-  decimal.bits[index / MAX_BITS] =
-      s21_unset_bit(decimal.bits[index / MAX_BITS], index % MAX_BITS);
+  int byte = index / MAX_BITS;
+  int bit = index % MAX_BITS;
+
+  decimal.bits[byte] = s21_unset_bit(decimal.bits[byte], bit);
   return decimal;
 }
 
