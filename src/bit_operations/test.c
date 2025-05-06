@@ -843,6 +843,69 @@ START_TEST(s21_set_zero_15_2) {
 }
 END_TEST
 
+// s21_set_zero_30
+// биты включены
+START_TEST(s21_set_zero_30_1) {
+  int diff = 96;
+  s21_decimal num = {{0, 0, 0, 0}};
+
+  // включаем все биты, кроме последнего, потому что последний бит это знак
+  int counter = 0;
+  for (size_t i = 0; i < 31; i++) {
+    counter++;
+    num = s21_decimal_set_bit(num, diff + i);
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 1);
+  }
+
+  // выключаем биты и проверяем, выключены ли они
+  num = s21_set_zero_30(num);
+  for (size_t i = 24; i < 31; i++) {
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 0);
+  }
+
+  //  проверяем, что остальные биты остались включены
+  for (size_t i = 0; i < 24; i++) {
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 1);
+  }
+}
+END_TEST
+
+// биты выключены
+START_TEST(s21_set_zero_30_2) {
+  int diff = 96;
+  s21_decimal num = {{0, 0, 0, 0}};
+
+  // включаем остальные биты
+  for (size_t i = 24; i < 31; i++) {
+    num = s21_decimal_set_bit(num, diff + i);
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 1);
+  }
+
+  // проверяем, что нужные биты выключены
+  for (size_t i = 0; i < 24; i++) {
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 0);
+  }
+
+  // выключаем биты и проверяем, выключены ли они
+  num = s21_set_zero_30(num);
+  for (size_t i = 24; i < 31; i++) {
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 0);
+  }
+
+  // проверяем, что остальные биты остались выключены
+  for (size_t i = 0; i < 24; i++) {
+    int res = s21_decimal_check_bit(num, diff + i);
+    ck_assert_int_eq(res, 0);
+  }
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -949,6 +1012,12 @@ int main(void) {
   tcase_add_test(tc1_1, s21_set_zero_15_1);
   // биты включены
   tcase_add_test(tc1_1, s21_set_zero_15_2);
+
+  // s21_set_zero_30
+  // биты включены
+  // биты выключены
+  tcase_add_test(tc1_1, s21_set_zero_30_1);
+  tcase_add_test(tc1_1, s21_set_zero_30_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
