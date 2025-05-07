@@ -1,8 +1,8 @@
 #ifndef S21_ARITHMETIC_H
 #define S21_ARITHMETIC_H
 
-#include "../something.h"
 #include "../bit_operations/bit_operations.h"
+#include "../something.h"
 
 typedef enum s21_arithmetic_res {
   ARITHM_OK = 0,

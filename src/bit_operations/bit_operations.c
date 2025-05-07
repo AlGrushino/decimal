@@ -123,7 +123,7 @@ s21_decimal s21_set_zero_30(s21_decimal decimal) {
 
 @return res 1 - отрицательный, 0 - положительный
 */
-int s21_get_sign(s21_decimal decimal){
+int s21_get_sign(s21_decimal decimal) {
   // мб стотит проверить, что не ноль
   int res = s21_check_bit(decimal.bits[3], 31);
   return res;
