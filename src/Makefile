@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -std=c11
+CFLAGS = -Wall -Wextra -Werror -std=gnu11
 GCOV = -fprofile-arcs -ftest-coverage
 
 UNAME_S := $(shell uname -s)
@@ -24,9 +24,14 @@ clean:
 
 
 # bit_operations
+# bit_operations.a:
+# 	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
+# 	ar rcs bit_operations.a
+
 bit_operations.a:
-	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
-	ar rcs bit_operations.a
+	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c -o bit_operations.o
+	ar rcs bit_operations.a bit_operations.o
+
 
 test_bit_operations:
 	@rm -rf test
