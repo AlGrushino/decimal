@@ -12,16 +12,19 @@ int s21_is_equal(s21_decimal one, s21_decimal two) {
 
   // убрать последние нули, эту функцию нужно реализовать
   // s21_remove_zeroes();
-  s21_decimal one_no_zeroes = s21_remove_zeroes(one);
-  s21_decimal two_no_zeroes = s21_remove_zeroes(two);
+  // s21_decimal one_no_zeroes = s21_remove_zeroes(one);
+  // s21_decimal two_no_zeroes = s21_remove_zeroes(two);
 
-  // сравнить на ноль
-  if (TRUE == s21_compare_to_zero(one_no_zeroes, two_no_zeroes)) {
-    res = TRUE;
-  }
+  // // сравнить на ноль
+  // if (TRUE == s21_compare_to_zero(one_no_zeroes) &&
+  //     TRUE == s21_compare_to_zero(two_no_zeroes)) {
+  //   res = TRUE;
+  // }
   // сравнить если не ноль
   // сравнить знаки
-  if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes, two_no_zeroes)) {
+  // if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes, two_no_zeroes))
+  // {
+  if (FALSE == res && TRUE == s21_compare_sign(one, two)) {
     res = TRUE;
   }
 
@@ -71,15 +74,14 @@ int s21_compare_sign(s21_decimal one, s21_decimal two) {
 @return int 1 - оба числа равны нулю, 0 - не оба числа равны нулю
 */
 // переписать эту функцию на int s21_equal_to_zero(s21_decimal);
-int s21_compare_to_zero(s21_decimal one, s21_decimal two) {
+int s21_compare_to_zero(s21_decimal one) {
   compare_res res = FALSE;
 
-  if (0 == one.bits[0] && 0 == one.bits[1] && 0 == one.bits[2] &&
-      0 == two.bits[0] && 0 == two.bits[1] && 0 == two.bits[2]) {
+  if (0 == one.bits[0] && 0 == one.bits[1] && 0 == one.bits[2]) {
     res = TRUE;
   }
 
-  return (int)res;
+  return res;
 }
 
 /*
@@ -89,14 +91,16 @@ int s21_compare_to_zero(s21_decimal one, s21_decimal two) {
 @param s21_decimal two
 @return int 1 - числа равны друг другу, 0 - числа не равны друг другу
 */
-int s21_is_not_equal(s21_decimal one, s21_decimal two) {
-  return !s21_is_equal(one, two);
-}
+// int s21_is_not_equal(s21_decimal one, s21_decimal two) {
+//   return !s21_is_equal(one, two);
+// }
 
-int s21_is_greater(s21_decimal one, s21_decimal two) {}
+// int s21_is_greater(s21_decimal one, s21_decimal two) {}
 
-int s21_is_greater_or_equal(s21_decimal one, s21_decimal two) {
-  return s21_is_greater(one, two) || s21_is_equal(one, two);
-}
+// int s21_is_greater_or_equal(s21_decimal one, s21_decimal two) {
+//   return s21_is_greater(one, two) || s21_is_equal(one, two);
+// }
 
-int s21_is_less(s21_decimal one, s21_decimal two) {}
+// int s21_is_less(s21_decimal one, s21_decimal two) {
+//   return !s21_is_greater(one, two);
+// }

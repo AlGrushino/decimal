@@ -12,10 +12,7 @@ int s21_is_equal(s21_decimal, s21_decimal);
 int s21_is_not_equal(s21_decimal, s21_decimal);
 int s21_compare_num(s21_decimal one, s21_decimal two);
 int s21_compare_sign(s21_decimal, s21_decimal);
-int s21_compare_to_zero(s21_decimal, s21_decimal);
-
-// 0 false
-// 1 true
+int s21_compare_to_zero(s21_decimal);
 
 typedef enum s21_compare_res { FALSE = 0, TRUE = 1 } compare_res;
 
