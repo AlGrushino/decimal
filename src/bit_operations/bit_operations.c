@@ -20,7 +20,7 @@
 // }
 
 int s21_check_bit(int num, int index) {
-  int res = 1;
+  unsigned int res = 1;
 
   res = num & (res << index);
   res = res >> index;
