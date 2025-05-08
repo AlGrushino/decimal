@@ -52,3 +52,7 @@ int s21_compare_to_zero(s21_decimal one, s21_decimal two) {
 
   return res;
 }
+
+int s21_is_not_equal(s21_decimal one, s21_decimal two) {
+  return !s21_is_equal(one, two);
+}

@@ -39,3 +39,20 @@ gcov_bit_operations: test_bit_operations
 	@gcovr --html-self-contained --html-details -o logs/report.html
 	@echo "Building report..."
 	@open logs/report.html
+
+# comparison
+comparison.a:
+	$(CC) $(CFLAGS) -c comparison/s21_comparison.c
+	ar rcs comparison.a
+
+test_comparison:
+	@rm -rf test
+	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c $(CLIBS) -o test
+	@./test
+
+gcov_comparison: test_comparison
+	@rm -rf test-test.gcda test-test.gcno
+	@mkdir logs
+	@gcovr --html-self-contained --html-details -o logs/report.html
+	@echo "Building report..."
+	@open logs/report.html
