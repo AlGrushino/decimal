@@ -1,5 +1,12 @@
 #include "s21_comparison.h"
 
+/*
+@brief Сравнивает два числа s21_decimal
+
+@param one s21_decimal
+@param two s21_decimal
+@return int 1 - числа равны, 0 - числа не равны
+*/
 int s21_is_equal(s21_decimal one, s21_decimal two) {
   compare_res res = FALSE;
 
@@ -18,9 +25,16 @@ int s21_is_equal(s21_decimal one, s21_decimal two) {
     res = TRUE;
   }
 
-  return res;
+  return (int)res;
 }
 
+/*
+@brief Сравнивает два числа s21_decimal без учёта последнего инта
+
+@param one s21_decimal
+@param two s21_decimal
+@return int 1 - числа равны, 0 - числа не равны
+*/
 int s21_compare_num(s21_decimal one, s21_decimal two) {
   compare_res res = FALSE;
 
@@ -29,9 +43,16 @@ int s21_compare_num(s21_decimal one, s21_decimal two) {
     res = TRUE;
   }
 
-  return res;
+  return (int)res;
 }
 
+/*
+@brief Сравнивает знаки двух числе s21_decimal
+
+@param one s21_decimal
+@param two s21_decimal
+@return int 1 - знаки равны, 0 - числа не равны
+*/
 int s21_compare_sign(s21_decimal one, s21_decimal two) {
   compare_res res = FALSE;
 
@@ -39,9 +60,17 @@ int s21_compare_sign(s21_decimal one, s21_decimal two) {
     res = TRUE;
   }
 
-  return res;
+  return (int)res;
 }
 
+/*
+@brief Сравнивает, равны ли два числа нулю
+
+@param one s21_decimal
+@param two s21_decimal
+@return int 1 - оба числа равны нулю, 0 - не оба числа равны нулю
+*/
+// переписать эту функцию на int s21_equal_to_zero(s21_decimal);
 int s21_compare_to_zero(s21_decimal one, s21_decimal two) {
   compare_res res = FALSE;
 
@@ -50,9 +79,24 @@ int s21_compare_to_zero(s21_decimal one, s21_decimal two) {
     res = TRUE;
   }
 
-  return res;
+  return (int)res;
 }
 
+/*
+@brief Сравнивает два числа на неравенство друг другу
+
+@param s21_decimal one
+@param s21_decimal two
+@return int 1 - числа равны друг другу, 0 - числа не равны друг другу
+*/
 int s21_is_not_equal(s21_decimal one, s21_decimal two) {
   return !s21_is_equal(one, two);
 }
+
+int s21_is_greater(s21_decimal one, s21_decimal two) {}
+
+int s21_is_greater_or_equal(s21_decimal one, s21_decimal two) {
+  return s21_is_greater(one, two) || s21_is_equal(one, two);
+}
+
+int s21_is_less(s21_decimal one, s21_decimal two) {}
