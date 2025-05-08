@@ -12,5 +12,6 @@ s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index);
 s21_decimal s21_set_zero_15(s21_decimal decimal);
 s21_decimal s21_set_zero_30(s21_decimal decimal);
 int s21_get_sign(s21_decimal decimal);
+s21_decimal s21_remove_zeroes(s21_decimal);
 
 #endif
