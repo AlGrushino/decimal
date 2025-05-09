@@ -5,15 +5,15 @@
 
 @param num int
 @param index int индекс бита
-@return результат проверки 1 - включён, 0 - выключен
+@return bool true - включён, false - выключен
 Если пихать индекс вне диапазона, возвращает 0
 */
-int s21_check_bit(int num, int index) {
-  int res = 0;
+bool s21_check_bit(int num, int index) {
+  bool res = false;
 
   num = num & (1 << index);
   if (num) {
-    res = 1;
+    res = true;
   }
 
   return res;
@@ -46,12 +46,12 @@ int s21_unset_bit(int num, int index) { return num & (~(1 << index)); }
 
 @param decimal число s21_decimal, которое проверяем
 @param index идндекс бита, который провеярем
-@return результат проверки, 1 - включён, 0 - выключен
+@return bool, true - включён, false - выключен
 */
-int s21_decimal_check_bit(s21_decimal decimal, int index) {
+bool s21_decimal_check_bit(s21_decimal decimal, int index) {
   int byte = index / MAX_BITS;
   int bit = index % MAX_BITS;
-  int res = s21_check_bit(decimal.bits[byte], bit);
+  bool res = s21_check_bit(decimal.bits[byte], bit);
 
   return res;
 }

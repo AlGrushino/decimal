@@ -2,11 +2,12 @@
 #define BIT_OPERATIONS_H
 
 #include "../something.h"
+#include "stdbool.h"
 
-int s21_check_bit(int num, int index);
+bool s21_check_bit(int num, int index);
 int s21_set_bit(int num, int index);
 int s21_unset_bit(int num, int index);
-int s21_decimal_check_bit(s21_decimal decimal, int index);
+bool s21_decimal_check_bit(s21_decimal decimal, int index);
 s21_decimal s21_decimal_set_bit(s21_decimal decimal, int index);
 s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index);
 s21_decimal s21_set_zero_15(s21_decimal decimal);
