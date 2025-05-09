@@ -24,9 +24,8 @@ clean:
 
 
 # bit_operations
-bit_operations.a:
-	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
-	ar rcs bit_operations.a
+bit_operations.o: bit_operations/bit_operations.c
+	@$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
 
 test_bit_operations:
 	@rm -rf test
@@ -41,13 +40,12 @@ gcov_bit_operations: test_bit_operations
 	@open logs/report.html
 
 # comparison
-comparison.a:
-	$(CC) $(CFLAGS) -c comparison/s21_comparison.c
-	ar rcs comparison.a
+comparison.o: comparison/s21_comparison.c
+	@$(CC) $(CFLAGS) -c comparison/s21_comparison.c
 
-test_comparison:
+test_comparison: comparison.o bit_operations.o
 	@rm -rf test
-	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c $(CLIBS) -o test
+	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c bit_operations.o $(CLIBS) -o test
 	@./test
 
 gcov_comparison: test_comparison

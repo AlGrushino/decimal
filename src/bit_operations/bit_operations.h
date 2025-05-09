@@ -1,5 +1,5 @@
-#ifndef S21_BIT_OPERATIONS_H
-#define S21_BIT_OPERATIONS_H
+#ifndef BIT_OPERATIONS_H
+#define BIT_OPERATIONS_H
 
 #include "../something.h"
 
