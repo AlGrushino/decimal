@@ -8,7 +8,7 @@
 @return int 1 - числа равны, 0 - числа не равны
 */
 int s21_is_equal(s21_decimal one, s21_decimal two) {
-  compare_res res = FALSE;
+  bool res = false;
 
   // убрать последние нули, эту функцию нужно реализовать
   // s21_remove_zeroes();
@@ -24,8 +24,8 @@ int s21_is_equal(s21_decimal one, s21_decimal two) {
   // сравнить знаки
   // if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes, two_no_zeroes))
   // {
-  if (FALSE == res && TRUE == s21_compare_sign(one, two)) {
-    res = TRUE;
+  if (false == res && true == s21_compare_sign(one, two)) {
+    res = true;
   }
 
   return (int)res;
@@ -36,17 +36,17 @@ int s21_is_equal(s21_decimal one, s21_decimal two) {
 
 @param one s21_decimal
 @param two s21_decimal
-@return int 1 - числа равны, 0 - числа не равны
+@return bool true - числа равны, false - числа не равны
 */
-int s21_compare_num(s21_decimal one, s21_decimal two) {
-  compare_res res = FALSE;
+bool s21_compare_num(s21_decimal one, s21_decimal two) {
+  bool res = false;
 
   if (one.bits[0] == two.bits[0] && one.bits[1] == two.bits[1] &&
       one.bits[2] == two.bits[2]) {
-    res = TRUE;
+    res = true;
   }
 
-  return (int)res;
+  return res;
 }
 
 /*
@@ -54,16 +54,16 @@ int s21_compare_num(s21_decimal one, s21_decimal two) {
 
 @param one s21_decimal
 @param two s21_decimal
-@return int 1 - знаки равны, 0 - числа не равны
+@return bool true - знаки равны, flase - знаки не равны
 */
-int s21_compare_sign(s21_decimal one, s21_decimal two) {
-  compare_res res = FALSE;
+bool s21_compare_sign(s21_decimal one, s21_decimal two) {
+  bool res = false;
 
   if (s21_get_sign(one) == s21_get_sign(two)) {
-    res = TRUE;
+    res = true;
   }
 
-  return (int)res;
+  return res;
 }
 
 /*
@@ -71,14 +71,13 @@ int s21_compare_sign(s21_decimal one, s21_decimal two) {
 
 @param one s21_decimal
 @param two s21_decimal
-@return int 1 - оба числа равны нулю, 0 - не оба числа равны нулю
+@return bool true - оба числа равны нулю, false - не оба числа равны нулю
 */
-// переписать эту функцию на int s21_equal_to_zero(s21_decimal);
-int s21_compare_to_zero(s21_decimal one) {
-  compare_res res = FALSE;
+bool s21_compare_to_zero(s21_decimal one) {
+  bool res = false;
 
   if (0 == one.bits[0] && 0 == one.bits[1] && 0 == one.bits[2]) {
-    res = TRUE;
+    res = true;
   }
 
   return res;
