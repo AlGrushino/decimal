@@ -1,74 +1,125 @@
 #include "s21_decimal.h"
 
-
-int s21_check_bit1(int num, int index) {
-    unsigned int res = 1;
-  
-    res = num & (res << index);
-    res = res >> index;
-  
-    return res;
+void print_binary(unsigned int num) {
+  for (int i = 31; i >= 0; i--) {
+    printf("%d", (num >> i) & 1);
+  }
+  printf(" ");
 }
 
-int s21_check_bit2(int num, int index) {
-    int res = 0;
-  
-    num = num & (1 << index);
-    if (num) {
-      res = 1;
-    }
-  
-    return res;
+void mult_by_ten(s21_decimal *res) { // <<1 умножение на два: (<<1 + <<3) == умножение на 10
+  unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
+  unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow)
+  unsigned long long overflow = 0;
+  for (int i = 0; i<3; i++) {
+      temp = ((unsigned long long)res->bits[i] << 1) + overflow;
+      temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF); //0xFFFFFFFF = 32 бита
+      overflow = temp >> 32;
+  }
+  unsigned int doubled_mantissa[3] = {temp_mantissa[0], temp_mantissa[1], temp_mantissa[2]};
+  overflow = 0; // нужно ли занулять temp_mantissa?
+  for (int i = 0; i<3; i++) {
+      temp = ((unsigned long long)res->bits[i] << 3) + overflow;
+      temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
+      overflow = temp >> 32;
+  }
+  unsigned int eight_mantissa[3] = {temp_mantissa[0], temp_mantissa[1], temp_mantissa[2]};
+  overflow = 0; 
+  for (int i = 0; i < 3; i++) {
+      temp = (unsigned long long)doubled_mantissa[i] + eight_mantissa[i] + overflow;
+      res->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
+      overflow = temp >> 32;
+  }
+}
+
+void mult_by_ten_times(s21_decimal *res, int times) {
+  for (int i = 0; i<times; i++) {
+      mult_by_ten(res);
+  }
+}
+
+void div_by_ten(s21_decimal *res) { 
+  unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
+  unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow) 
+  unsigned long long rest = 0;
+  for (int i = 2; i>=0; i--) {
+      temp = (rest << 32) | temp_mantissa[i];
+      temp_mantissa[i] = (unsigned int)(temp / 10);
+      rest = temp % 10;   
+  }
+  for (int i = 0; i<3;i++) {
+      res->bits[i] = temp_mantissa[i];
+  }
+}
+
+void div_by_ten_times(s21_decimal *res, int times) {
+  for (int i = 0; i<times; i++) {
+      div_by_ten(res);
   }
 
-  int s21_decimal_check_bit1(s21_decimal decimal, int index) {
-    int byte = index / MAX_BITS;
-    int bit = index % MAX_BITS;
-    int res = s21_check_bit1(decimal.bits[byte], bit);
-  
-    return res;
+}
+
+void set_scale(s21_decimal *res, unsigned char scale) { //unsigned пч нет отриц, char потому что он как раз 8 бит 
+  res->bits[3] &= ~(0xFF << 16);
+  res->bits[3] |= ((int)scale << 16); // приводим к int так как работаем со структурой интов 
+}
+
+int get_scale(s21_decimal *res) {
+  return (res->bits[3] >> 16) & 0xFF;
+}
+
+void normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
+  int value1_scale = get_scale(value1);
+  int value2_scale = get_scale(value2);
+  if (value1_scale <= 28 && value2_scale <= 28) {
+      if (value1_scale > value2_scale) {
+          int diff = value1_scale - value2_scale;
+          set_scale(value2, value1_scale);
+          mult_by_ten_times(value2, diff);
+      }
+      else {
+          int diff = value2_scale - value1_scale;
+          set_scale(value1, value2_scale);
+          mult_by_ten_times(value1, diff);
+      }
+  } else if (value1_scale > 28 || value2_scale > 28) {
+      int diff_val1 = 28 - value1_scale;
+      int diff_val2 = 28 - value2_scale;
+      if (diff_val1 > 0) {
+          mult_by_ten_times(value1, diff_val1);
+      }
+      else if (diff_val1 < 0) {
+          div_by_ten_times(value1, -diff_val1);
+      }
+      set_scale(value1, 28);
+      if (diff_val2 > 0) {
+          mult_by_ten_times(value2, diff_val2);
+      }
+      else if (diff_val2 < 0) {
+          div_by_ten_times(value2, -diff_val2);
+      }
+      set_scale(value2, 28);
   }
-
-  int s21_set_bit1(int num, int index) { return num | (1 << index); }
-
-  s21_decimal s21_decimal_set_bit1(s21_decimal decimal, int index) {
-    int byte = index / MAX_BITS;
-    int bit = index % MAX_BITS;
-    printf("byte: %d bit: %d\n", byte, bit);
-    decimal.bits[byte] = s21_set_bit1(decimal.bits[byte], bit);
-    return decimal;
-  }
-
-
-  void print_binary(unsigned int num) {
-    for (int i = 31; i >= 0; i--) {
-      printf("%d", (num >> i) & 1);
-    }
-  }
+}
 
 int main ()
 {
-    int a = 123;
-    int index = 100;
-    int diff = 96;
+  s21_decimal num1 = {{15, 0, 0, 0}};
+  s21_decimal num2 = {{150, 0, 0, 0}};
+  set_scale(&num1, 29);
+  set_scale(&num2, 29);
 
-    s21_decimal num = {{0, 0, 0, 0}};
-  
-    // включаем остальные биты
-    // for (size_t i = 16; i < 35; i++) {
-    //   num = s21_decimal_set_bit1(num, diff + i);
-    //   //printf("num:%d %d %d %d\n", num.bits[0], num.bits[1], num.bits[2], num.bits[3]);
-    //   print_binary(num.bits[0]);
-    //   print_binary(num.bits[1]);
-    //   print_binary(num.bits[2]);
-    //   print_binary(num.bits[3]);
-    //   printf("\n");
-    //   printf("index: %d\n", diff + i);
+  //div_by_ten(&num);
+  normalization(&num1, &num2);
+  print_binary(num1.bits[0]);
+  print_binary(num1.bits[1]);
+  print_binary(num1.bits[2]);
+  print_binary(num1.bits[3]);
+  printf("\n");
+  print_binary(num2.bits[0]);
+  print_binary(num2.bits[1]);
+  print_binary(num2.bits[2]);
+  print_binary(num2.bits[3]);
+  printf("\n");
 
-
-    //   int res = s21_decimal_check_bit1(num, diff + i);
-    //   printf("num:%d %d %d %d my: %d\n", num.bits[0], num.bits[1], num.bits[2], num.bits[3], res);
-    // }
-    int res = s21_check_bit1(-65536, 31);
-    printf("my: %d", res);
 }

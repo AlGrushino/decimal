@@ -1,1 +1,102 @@
 #include "s21_other.h"
+
+typedef struct s21_decimal_normalization {
+    unsigned int mantisa;
+    unsigned int scale;
+} s21_decimal_normalization;
+
+//что с округлением тут??
+void mult_by_ten(s21_decimal *res) { // <<1 умножение на два: (<<1 + <<3) == умножение на 10
+    unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
+    unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow)
+    unsigned long long overflow = 0;
+    for (int i = 0; i<3; i++) {
+        temp = ((unsigned long long)res->bits[i] << 1) + overflow;
+        temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF); //0xFFFFFFFF = 32 бита
+        overflow = temp >> 32;
+    }
+    unsigned int doubled_mantissa[3] = {temp_mantissa[0], temp_mantissa[1], temp_mantissa[2]};
+    overflow = 0; // нужно ли занулять temp_mantissa?
+    for (int i = 0; i<3; i++) {
+        temp = ((unsigned long long)res->bits[i] << 3) + overflow;
+        temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
+        overflow = temp >> 32;
+    }
+    unsigned int eight_mantissa[3] = {temp_mantissa[0], temp_mantissa[1], temp_mantissa[2]};
+    overflow = 0; 
+    for (int i = 0; i < 3; i++) {
+        temp = (unsigned long long)doubled_mantissa[i] + eight_mantissa[i] + overflow;
+        res->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
+        overflow = temp >> 32;
+    }
+}
+
+void mult_by_ten_times(s21_decimal *res, int times) {
+    for (int i = 0; i<times; i++) {
+        mult_by_ten(res);
+    }
+}
+
+void div_by_ten(s21_decimal *res) { 
+    unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
+    unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow) 
+    unsigned long long rest = 0;
+    for (int i = 2; i>=0; i--) {
+        temp = (rest << 32) | temp_mantissa[i];
+        temp_mantissa[i] = (unsigned int)(temp / 10);
+        rest = temp % 10;
+    }
+    for (int i = 0; i<3;i++) {
+        res->bits[i] = temp_mantissa[i];
+    }
+}
+
+void div_by_ten_times(s21_decimal *res, int times) {
+    for (int i = 0; i<times; i++) {
+        div_by_ten(res);
+    }
+}
+
+void set_scale(s21_decimal *res, unsigned char scale) { //unsigned пч нет отриц, char потому что он как раз 8 бит 
+    res->bits[3] &= ~(0xFF << 16);
+    res->bits[3] |= ((int)scale << 16); // приводим к int так как работаем со структурой интов 
+}
+
+int get_scale(s21_decimal *res) {
+    return (res->bits[3] >> 16) & 0xFF;
+}
+
+void normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
+    int value1_scale = get_scale(value1);
+    int value2_scale = get_scale(value2);
+    if (value1_scale <= 28 && value2_scale <= 28) {
+        if (value1_scale > value2_scale) {
+            int diff = value1_scale - value2_scale;
+            set_scale(value2, value1_scale);
+            mult_by_ten_times(value2, diff);
+        }
+        else {
+            int diff = value2_scale - value1_scale;
+            set_scale(value1, value2_scale);
+            mult_by_ten_times(value1, diff);
+        }
+    } else if (value1_scale > 28 || value2_scale > 28) {
+        int diff_val1 = 28 - value1_scale;
+        int diff_val2 = 28 - value2_scale;
+        if (diff_val1 > 0) {
+            mult_by_ten_times(value1, diff_val1);
+        }
+        else if (diff_val1 < 0) {
+            div_by_ten_times(value1, -diff_val1);
+        }
+        set_scale(value1, 28);
+        if (diff_val2 > 0) {
+            mult_by_ten_times(value2, diff_val2);
+        }
+        else if (diff_val2 < 0) {
+            div_by_ten_times(value2, -diff_val2);
+        }
+        set_scale(value2, 28);
+    }
+}
+
