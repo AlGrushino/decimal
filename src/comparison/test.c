@@ -153,6 +153,69 @@ START_TEST(s21_compare_num_7) {
 }
 END_TEST
 
+START_TEST(s21_compare_num_8) {
+  s21_decimal one = {{UINT_MAX, 0, 0, 0}};
+  s21_decimal two = {{UINT_MAX, 0, 0, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_compare_num_9) {
+  s21_decimal one = {{UINT_MAX, UINT_MAX, 0, 0}};
+  s21_decimal two = {{UINT_MAX, UINT_MAX, 0, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_compare_num_10) {
+  s21_decimal one = {{UINT_MAX, 0, UINT_MAX, 0}};
+  s21_decimal two = {{UINT_MAX, 0, UINT_MAX, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_compare_num_11) {
+  s21_decimal one = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
+  s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_compare_num_12) {
+  s21_decimal one = {{0, UINT_MAX, UINT_MAX, 0}};
+  s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_num_13) {
+  s21_decimal one = {{UINT_MAX, 0, UINT_MAX, 0}};
+  s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_num_14) {
+  s21_decimal one = {{UINT_MAX, UINT_MAX, 0, 0}};
+  s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
+
+  int res = s21_compare_num(one, two);
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -181,6 +244,13 @@ int main(void) {
   tcase_add_test(tc1_1, s21_compare_num_5);
   tcase_add_test(tc1_1, s21_compare_num_6);
   tcase_add_test(tc1_1, s21_compare_num_7);
+  tcase_add_test(tc1_1, s21_compare_num_8);
+  tcase_add_test(tc1_1, s21_compare_num_9);
+  tcase_add_test(tc1_1, s21_compare_num_10);
+  tcase_add_test(tc1_1, s21_compare_num_11);
+  tcase_add_test(tc1_1, s21_compare_num_12);
+  tcase_add_test(tc1_1, s21_compare_num_13);
+  tcase_add_test(tc1_1, s21_compare_num_14);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
