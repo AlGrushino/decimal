@@ -119,7 +119,7 @@ s21_decimal s21_set_zero_30(s21_decimal decimal) {
 }
 
 /*
-@breif Возвращает знак числа
+@brief Возвращает знак числа
 
 @param decimal s21_decimal
 @return res 1 - отрицательный, 0 - положительный
@@ -129,13 +129,16 @@ int s21_get_sign(s21_decimal decimal) {
   return res;
 }
 
-// s21_decimal s21_remove_zeroes(s21_decimal decimal) {
-//   s21_decimal res = decimal;
-//   int scale = s21_get_scale(decimal);
-// }
+s21_decimal s21_remove_zeroes(s21_decimal decimal) {
+  s21_decimal res = decimal;
+  int scale = s21_get_scale(decimal);
+
+  if (scale > 0 && scale < 29) {
+  }
+}
 
 /*
-@breif Возвращает скейл
+@brief Возвращает скейл от 0 до 28 включительно
 
 @param decimal s21_decimal
 @return unsigned int scale
