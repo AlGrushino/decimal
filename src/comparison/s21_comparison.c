@@ -5,7 +5,7 @@
 
 @param one s21_decimal
 @param two s21_decimal
-@return int 1 - числа равны, 0 - числа не равны
+@return int 1 - числа равны, 0 - числа неравны
 */
 int s21_is_equal(s21_decimal one, s21_decimal two) {
   bool res = false;

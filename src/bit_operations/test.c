@@ -906,6 +906,22 @@ START_TEST(s21_set_zero_30_2) {
 }
 END_TEST
 
+START_TEST(s21_get_sign_1) {
+  s21_decimal num = {{0, 0, 0, 2147483648}};
+  int res = s21_get_sign(num);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_get_sign_2) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  int res = s21_get_sign(num);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -1018,6 +1034,10 @@ int main(void) {
   tcase_add_test(tc1_1, s21_set_zero_30_1);
   // биты выключены
   tcase_add_test(tc1_1, s21_set_zero_30_2);
+
+  // s21_get_sign
+  tcase_add_test(tc1_1, s21_get_sign_1);
+  tcase_add_test(tc1_1, s21_get_sign_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
