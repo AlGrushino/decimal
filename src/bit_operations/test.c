@@ -922,6 +922,111 @@ START_TEST(s21_get_sign_2) {
 }
 END_TEST
 
+// включаем самый первый бит
+// 1
+// 0000 0000 0000 0000 1000 0000 0000 0000
+// 96 + 16 + 1
+START_TEST(s21_get_scale_1) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 112);
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 1);
+}
+END_TEST
+
+// 0
+START_TEST(s21_get_scale_2) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 0);
+}
+END_TEST
+
+// 0000 0000 0000 0000 | 0011 1000 0000 0000
+// 28
+START_TEST(s21_get_scale_3) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 114);
+  num = s21_decimal_set_bit(num, 115);
+  num = s21_decimal_set_bit(num, 116);
+
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 28);
+}
+END_TEST
+
+// 2
+START_TEST(s21_get_scale_4) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 113);
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 2);
+}
+END_TEST
+
+// 3
+START_TEST(s21_get_scale_5) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 113);
+  num = s21_decimal_set_bit(num, 112);
+
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 3);
+}
+END_TEST
+
+// 4
+START_TEST(s21_get_scale_6) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 114);
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 4);
+}
+END_TEST
+
+// 5
+START_TEST(s21_get_scale_7) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 114);
+  num = s21_decimal_set_bit(num, 112);
+
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 5);
+}
+END_TEST
+
+// 6
+START_TEST(s21_get_scale_8) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 114);
+  num = s21_decimal_set_bit(num, 113);
+
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 6);
+}
+END_TEST
+
+// 7
+START_TEST(s21_get_scale_9) {
+  s21_decimal num = {{0, 0, 0, 0}};
+  num = s21_decimal_set_bit(num, 114);
+  num = s21_decimal_set_bit(num, 113);
+  num = s21_decimal_set_bit(num, 112);
+
+  unsigned int res = s21_get_scale(num);
+
+  ck_assert_int_eq((int)res, 7);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -1038,6 +1143,19 @@ int main(void) {
   // s21_get_sign
   tcase_add_test(tc1_1, s21_get_sign_1);
   tcase_add_test(tc1_1, s21_get_sign_2);
+
+  // s21_get_scale
+  tcase_add_test(tc1_1, s21_get_scale_1);
+  tcase_add_test(tc1_1, s21_get_scale_2);
+  tcase_add_test(tc1_1, s21_get_scale_3);
+  tcase_add_test(tc1_1, s21_get_scale_4);
+  tcase_add_test(tc1_1, s21_get_scale_5);
+  tcase_add_test(tc1_1, s21_get_scale_6);
+  tcase_add_test(tc1_1, s21_get_scale_7);
+  tcase_add_test(tc1_1, s21_get_scale_8);
+  tcase_add_test(tc1_1, s21_get_scale_9);
+  // здесь тесты доходят до 7 скейла, но границы протестированы, поэтому не вижу
+  // большого смысла тестировать отсальное
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

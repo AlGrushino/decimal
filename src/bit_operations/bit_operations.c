@@ -90,7 +90,7 @@ s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index) {
 /*
 @brief Выключает нерабочие биты(0 - 15) в последнем байте decimal
 
-@param decimal
+@param decimal s21_decimal
 @return s21_decimal
 */
 s21_decimal s21_set_zero_15(s21_decimal decimal) {
@@ -107,7 +107,7 @@ s21_decimal s21_set_zero_15(s21_decimal decimal) {
 /*
 @brief Выключает нерабочие биты(24 - 30) в последнем байте decimal
 
-@param decimal
+@param decimal s21_decimal
 @return s21_decimal
 */
 s21_decimal s21_set_zero_30(s21_decimal decimal) {
@@ -119,12 +119,33 @@ s21_decimal s21_set_zero_30(s21_decimal decimal) {
 }
 
 /*
-@breif
+@breif Возвращает знак числа
 
+@param decimal s21_decimal
 @return res 1 - отрицательный, 0 - положительный
 */
 int s21_get_sign(s21_decimal decimal) {
-  // мб стотит проверить, что не ноль
   int res = s21_check_bit(decimal.bits[3], 31);
   return res;
+}
+
+// s21_decimal s21_remove_zeroes(s21_decimal decimal) {
+//   s21_decimal res = decimal;
+//   int scale = s21_get_scale(decimal);
+// }
+
+/*
+@breif Возвращает скейл
+
+@param decimal s21_decimal
+@return unsigned int scale
+*/
+unsigned int s21_get_scale(s21_decimal decimal) {
+  unsigned int scale = 0;
+  fields field;
+
+  field.num = decimal.bits[3];
+  scale = field.bits.scale;
+
+  return scale;
 }

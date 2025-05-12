@@ -17,4 +17,17 @@ typedef struct s21_decimal {
   unsigned int bits[4];
 } s21_decimal;
 
+/*
+структура-юнион с битовыми полями для получения степени
+*/
+typedef union s21_fields {
+  int num;
+  struct {
+    unsigned int useless : 16;
+    unsigned int scale : 8;
+    unsigned int useless_again : 7;
+    unsigned int sign : 1;
+  } bits;
+} fields;
+
 #endif
