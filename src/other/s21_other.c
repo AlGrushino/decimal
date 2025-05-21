@@ -1,9 +1,5 @@
 #include "s21_other.h"
 
-typedef struct s21_decimal_normalization {
-    unsigned int mantisa;
-    unsigned int scale;
-} s21_decimal_normalization;
 
 //что с округлением тут??
 void mult_by_ten(s21_decimal *res) { // <<1 умножение на два: (<<1 + <<3) == умножение на 10
@@ -37,6 +33,26 @@ void mult_by_ten_times(s21_decimal *res, int times) {
     }
 }
 
+void normal_rounding(unsigned int mantissa[3]) {
+    unsigned long long temp = 0;
+    unsigned long long rest = 0;
+    unsigned int temp_mantissa[3] = {mantissa[0], mantissa[1], mantissa[2]};
+
+    for (int i = 2; i >= 0; i--) {
+        temp = (rest << 32) | temp_mantissa[i];
+        temp_mantissa[i] = (unsigned int)(temp / 10);
+        rest = temp % 10;
+    }
+    if (rest >= 5) {
+        int carry = 1;
+        for (int i = 0; i < 3 && carry; i++) {
+            unsigned long long sum = (unsigned long long)mantissa[i] + carry;
+            mantissa[i] = (unsigned int)sum;
+            carry = (sum >> 32) & 1;
+        }
+    }
+}
+
 void div_by_ten(s21_decimal *res) { 
     unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
     unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow) 
@@ -46,6 +62,7 @@ void div_by_ten(s21_decimal *res) {
         temp_mantissa[i] = (unsigned int)(temp / 10);
         rest = temp % 10;
     }
+    normal_rounding(temp_mantissa);
     for (int i = 0; i<3;i++) {
         res->bits[i] = temp_mantissa[i];
     }
@@ -65,6 +82,27 @@ void set_scale(s21_decimal *res, unsigned char scale) { //unsigned пч нет �
 int get_scale(s21_decimal *res) {
     return (res->bits[3] >> 16) & 0xFF;
 }
+
+void get_mantissa(const s21_decimal *dec, unsigned int mantissa[3]) {
+    mantissa[0] = dec->bits[0];
+    mantissa[1] = dec->bits[1];
+    mantissa[2] = dec->bits[2];
+}
+
+int is_divisible_by_10(s21_decimal *dec) {
+    unsigned int temp_mantissa[3] = {dec->bits[0], dec->bits[1], dec->bits[2]};
+    unsigned long long temp = 0;
+    unsigned long long rest = 0;
+
+    for (int i = 2; i >= 0; i--) {
+        temp = (rest << 32) | temp_mantissa[i];
+        temp_mantissa[i] = (unsigned int)(temp / 10);
+        rest = temp % 10;
+    }
+
+    return rest == 0;
+}
+
 
 void normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
     int value1_scale = get_scale(value1);
@@ -98,5 +136,14 @@ void normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
         }
         set_scale(value2, 28);
     }
+    int new_scale = get_scale(value1); 
+    while (new_scale > 0 && is_divisible_by_10(value1) && is_divisible_by_10(value2)) { //сокрщаем 
+        div_by_ten(value1);
+        div_by_ten(value2);
+        new_scale--;
+        set_scale(value1, new_scale);
+        set_scale(value2, new_scale);
+    }
+
 }
 
