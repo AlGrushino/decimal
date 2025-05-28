@@ -1,4 +1,5 @@
 #include "s21_decimal.h"
+#include <limits.h>
 
 void print_binary(unsigned int num) {
   for (int i = 31; i >= 0; i--) {
@@ -38,16 +39,7 @@ void mult_by_ten_times(s21_decimal *res, int times) {
   }
 }
 
-void normal_rounding(unsigned int mantissa[3]) {
-  unsigned long long temp = 0;
-  unsigned long long rest = 0;
-  unsigned int temp_mantissa[3] = {mantissa[0], mantissa[1], mantissa[2]};
-
-  for (int i = 2; i >= 0; i--) {
-      temp = (rest << 32) | temp_mantissa[i];
-      temp_mantissa[i] = (unsigned int)(temp / 10);
-      rest = temp % 10;
-  }
+void normal_rounding(unsigned int mantissa[3], unsigned long long rest) {
   if (rest >= 5) {
       int carry = 1;
       for (int i = 0; i < 3 && carry; i++) {
@@ -58,7 +50,7 @@ void normal_rounding(unsigned int mantissa[3]) {
   }
 }
 
-void div_by_ten(s21_decimal *res) { 
+void div_by_ten(s21_decimal *res) { //??????
   unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
   unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow) 
   unsigned long long rest = 0;
@@ -67,9 +59,20 @@ void div_by_ten(s21_decimal *res) {
       temp_mantissa[i] = (unsigned int)(temp / 10);
       rest = temp % 10;
   }
-  normal_rounding(temp_mantissa);
+  normal_rounding(temp_mantissa, rest);
   for (int i = 0; i<3;i++) {
       res->bits[i] = temp_mantissa[i];
+  }
+}
+
+void div_by_ten_without_rounding(s21_decimal *res) { //??????
+  unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
+  unsigned long long temp = 0; //64 бита (больше 32 на случай, если будет overflow) 
+  unsigned long long rest = 0;
+  for (int i = 2; i>=0; i--) {
+      temp = (rest << 32) | temp_mantissa[i];
+      temp_mantissa[i] = (unsigned int)(temp / 10);
+      rest = temp % 10;
   }
 }
 
@@ -104,9 +107,7 @@ int is_divisible_by_10(s21_decimal *dec) {
       temp_mantissa[i] = (unsigned int)(temp / 10);
       rest = temp % 10;
   }
-  printf("rest: %lld\n", rest);
-  int new_scale = get_scale(dec);
-  printf("new_scale_from_round:%d\n", new_scale);
+  printf("rest_from_divisinle: %lld\n", rest);
   return rest == 0;
 }
 
@@ -144,11 +145,10 @@ void normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
       set_scale(value2, 28);
   }
   int new_scale = get_scale(value1);
-  printf("\nPISKA\n");
   printf("new_scale:%d\n", new_scale);
   while (new_scale > 0 && is_divisible_by_10(value1) && is_divisible_by_10(value2)) { //сокрщаем 
-      div_by_ten(value1);
-      div_by_ten(value2);
+      div_by_ten_without_rounding(value1);
+      div_by_ten_without_rounding(value2);
       new_scale--;
       set_scale(value1, new_scale);
       set_scale(value2, new_scale);
@@ -243,16 +243,18 @@ int s21_is_greater_or_equal(s21_decimal value1, s21_decimal value2) {
 
 int main ()
 {
-  s21_decimal num1 = {{121234, 0, 0, 0}};
-  s21_decimal num2 = {{0, 0, 0, 0}};
-  set_scale(&num1, 0);
-  set_scale(&num2, 0);
+  printf("\n");
+  s21_decimal num1 = {{1500, 0, 0, 0}};
+  s21_decimal num2 = {{1500, 0, 0, 0}};
+  set_scale(&num1, 30);
+  set_scale(&num2, 30);
+  //div_by_ten_times(&num1, 1);
   //set_sign(&num1, 1);
-  set_sign(&num2, 1);
-  int res = s21_is_less_or_equal(num1, num2);
+  //set_sign(&num2, 1);
+  //int res = s21_is_equal(num1, num2);
 
   //div_by_ten(&num);
-  //normalization(&num1, &num2);
+  normalization(&num1, &num2);
   print_binary(num1.bits[3]);
   print_binary(num1.bits[2]);
   print_binary(num1.bits[1]);
@@ -265,5 +267,5 @@ int main ()
   printf("\n");
 
 
-  printf("res: %d", res);
+  //printf("res: %d", res);
 }
