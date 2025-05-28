@@ -17,7 +17,7 @@ void mult_by_ten(s21_decimal *res) { // <<1 умножение на два: (<<1
       overflow = temp >> 32;
   }
   unsigned int doubled_mantissa[3] = {temp_mantissa[0], temp_mantissa[1], temp_mantissa[2]};
-  overflow = 0; // нужно ли занулять temp_mantissa?
+  overflow = 0; // нужно ли занулять temp_mantissa? 
   for (int i = 0; i<3; i++) {
       temp = ((unsigned long long)res->bits[i] << 3) + overflow;
       temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
@@ -155,17 +155,104 @@ void normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
   }
 
 }
+int is_less_bits(s21_decimal value1, s21_decimal value2) {
+  int flag = 0;
+  for (int i = 2; i>=0; i--) {
+      if (value1.bits[i] < value2.bits[i]){
+          flag = 1;
+      }
+  }
+  return flag;
+}
+
+int get_sign(s21_decimal *res) {
+  return (res->bits[3] >> 31) & 1;
+}
+
+void set_sign(s21_decimal *res, int sign) { //а где проверять, чтобы знак был норм? 
+  unsigned int mask_for_last_bit = 1<<31;
+  if (sign) {
+      res->bits[3] |= mask_for_last_bit;
+  } else {
+      res->bits[3] &= ~mask_for_last_bit;
+  }
+}
+
+int s21_is_less(s21_decimal value1, s21_decimal value2) { //если оба нули?
+  int flag = 0;
+  int sign1 = get_sign(&value1);  
+  int sign2 = get_sign(&value2);
+  normalization(&value1, &value2);
+
+  if (sign1 > sign2) {
+      flag = 1;
+  } else if (sign1 == sign2) {
+      if (sign1 == 1) {
+          flag = is_less_bits(value2, value1);
+      }
+      else {
+          flag = is_less_bits(value1, value2);
+      }
+  }
+  return flag;
+}
+
+int s21_is_equal(s21_decimal value1, s21_decimal value2) {
+  int flag = 1;
+  normalization(&value1, &value2);
+  for (int i = 0; i<4 && flag; i++) {
+      if (value1.bits[i] != value2.bits[i]) {
+          flag = 0;
+      }
+  }
+  return flag;
+}
+
+int s21_is_not_equal(s21_decimal value1, s21_decimal value2) {
+  int flag = 0;
+  if (!s21_is_equal(value1, value2)) {
+      flag = 1;
+  }
+  return flag;
+}
+
+int s21_is_less_or_equal(s21_decimal value1, s21_decimal value2) {
+  int flag = 0;
+  if (s21_is_equal(value1, value2) || s21_is_less(value1, value2)) {
+      flag = 1;
+  }
+  return flag;
+}
+
+int s21_is_greater(s21_decimal value1, s21_decimal value2) {
+  int flag = 0;
+  if (!s21_is_less_or_equal(value1, value2)) {
+      flag = 1;
+  }
+  return flag; 
+}
+
+int s21_is_greater_or_equal(s21_decimal value1, s21_decimal value2) {
+  int flag = 0;
+  if (s21_is_equal(value1, value2) || s21_is_greater(value1, value2)) {
+      flag = 1;
+  }
+  return flag; 
+}
 
 
 int main ()
 {
-  s21_decimal num1 = {{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0}};
-  s21_decimal num2 = {{15, 0, 0, 0}};
-  set_scale(&num1, 28);
-  set_scale(&num2, 28);
+  s21_decimal num1 = {{121234, 0, 0, 0}};
+  s21_decimal num2 = {{0, 0, 0, 0}};
+  set_scale(&num1, 0);
+  set_scale(&num2, 0);
+  //set_sign(&num1, 1);
+  set_sign(&num2, 1);
+  int res = s21_is_less_or_equal(num1, num2);
 
   //div_by_ten(&num);
-  normalization(&num1, &num2);
+  //normalization(&num1, &num2);
   print_binary(num1.bits[3]);
   print_binary(num1.bits[2]);
   print_binary(num1.bits[1]);
@@ -177,4 +264,6 @@ int main ()
   print_binary(num2.bits[0]);
   printf("\n");
 
+
+  printf("res: %d", res);
 }
