@@ -33,6 +33,11 @@ test_bit_operations:
 	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
 	@./test
 
+# test_bit_operations:
+# 	@rm -rf test
+# 	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
+# 	@./test
+
 gcov_bit_operations: test_bit_operations
 	@rm -rf test-test.gcda test-test.gcno
 	@mkdir logs

@@ -3,7 +3,7 @@
 
 #include "arithmetic/s21_arithmetic.h"
 #include "bit_operations/bit_operations.h"
-#include "bit_operations/bit_operations.h"  // мб он здесь не нужен
+// #include "bit_operations/bit_operations.h"  // мб он здесь не нужен
 #include "comparison/s21_comparison.h"
 #include "converters/s21_converters.h"
 #include "other/s21_other.h"
@@ -29,9 +29,9 @@ bits[3] содержит коэффициент масштабирования �
 в инте 4 байта, 1 байт - 8 бит, всего 8 бит x 4 байта = 32 бита
 в 4 интах 32 бита x 4 = 128 бит
 */
-typedef struct {
-  int bits[4];
-} s21_decimal;
+// typedef struct {
+//   int bits[4];
+// } s21_decimal;
 
 /*
 0 - положительный знак числа
