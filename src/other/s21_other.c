@@ -102,7 +102,7 @@ int s21_is_divisible_by_10(s21_decimal *dec) {
 }
 
 
-void s21_normalization(s21_decimal *value1, s21_decimal *value2) { // do: round?
+void s21_normalization(s21_decimal *value1, s21_decimal *value2) { // do: переполнение мантиссы в случае > 28(сокращаем скейл и домнажаем) 
     int value1_scale = s21_get_scale(value1);
     int value2_scale = s21_get_scale(value2);
     if (value1_scale <= 28 && value2_scale <= 28) {
@@ -237,5 +237,22 @@ void s21_init_decimal(s21_decimal *value) {
     value->bits[2] = 0;
     value->bits[3] = 0;
   }
+
+typedef struct {
+    unsigned int bits[6];  // 192-битная мантисса (96*2)
+    int scale;             // масштаб 
+    int sign;              // знак 
+} s21_big_decimal;
+
+void s21_from_decimal_to_big(s21_decimal dec, s21_big_decimal *big) {
+    big->bits[0] = dec.bits[0];
+    big->bits[1] = dec.bits[1];
+    big->bits[2] = dec.bits[2];
+    big->bits[3] = 0;
+    big->bits[4] = 0;
+    big->bits[5] = 0;
+    big->scale = s21_get_scale(&dec);
+    big->sign = s21_get_sign(&dec);
+}
 
 
