@@ -8,13 +8,22 @@
 @return результат проверки 1 - включён, 0 - выключен
 Если пихать индекс вне диапазона, возвращает 0
 */
-int s21_check_bit(int num, int index) {
-  int res = 0;
+// int s21_check_bit(int num, int index) {
+//   int res = 0;
 
-  num = num & (1 << index);
-  if (num) {
-    res = 1;
-  }
+//   num = num & (1 << index);
+//   if (num) {
+//     res = 1;
+//   }
+
+//   return res;
+// }
+
+int s21_check_bit(int num, int index) {
+  unsigned int res = 1;
+
+  res = num & (res << index);
+  res = res >> index;
 
   return res;
 }

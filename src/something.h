@@ -15,7 +15,7 @@
 в 4 интах 32 бита x 4 = 128 бит
 */
 typedef struct s21_decimal {
-  int bits[4];
+  unsigned int bits[4];
 } s21_decimal;
 
 typedef struct s21_big_decimal {
