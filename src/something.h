@@ -6,6 +6,7 @@
 
 #define MAX_BITS 32
 #define ALL_BITS 128
+#define BIG_BITS 256
 
 #include <stdio.h>
 
@@ -16,5 +17,9 @@
 typedef struct s21_decimal {
   int bits[4];
 } s21_decimal;
+
+typedef struct s21_big_decimal {
+  int bits[8];
+} s21_big_decimal;
 
 #endif
