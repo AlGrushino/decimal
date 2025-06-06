@@ -7,7 +7,7 @@ typedef enum s21_arithmetic_res {
   ARITHM_OK = 0,
   GR_EQ_ETERN = 1,
   LE_EQ_ETERN = 2,
-  DIV_BY_ZERO = 4
+  DIV_BY_ZERO = 3
 
 } arithmetic_res;
 

@@ -1,4 +1,5 @@
 #include "s21_other.h"
+#include "../arithmetic/s21_arithmetic.h"
 
 
 //что с округлением тут??
@@ -101,6 +102,31 @@ int s21_is_divisible_by_10(s21_decimal *dec) {
     return rest == 0;
 }
 
+int s21_mult_by_ten_times_safe(s21_decimal *value, int times) {
+    int err_code = ARITHM_OK;
+    s21_decimal tmp = *value;
+    int sign = s21_get_sign(value);
+    
+    for (int i = 0; i < times && !err_code; i++) {
+        s21_decimal before = tmp;
+        s21_mult_by_ten(&tmp);
+        // Проверка на переполнение (если значение уменьшилось)
+        if (tmp.bits[0] < before.bits[0] || 
+            (tmp.bits[0] == before.bits[0] && tmp.bits[1] < before.bits[1]) ||
+            (tmp.bits[0] == before.bits[0] && tmp.bits[1] == before.bits[1] && tmp.bits[2] < before.bits[2])) { //при переполнении старших битов младшие биты сбрасываются в нули
+            if (sign) {
+              err_code = LE_EQ_ETERN;  
+            } else {
+                err_code = GR_EQ_ETERN;
+            }
+        } else {
+            *value = tmp;
+        }
+    }
+    
+    return err_code;
+}
+
 
 void s21_normalization(s21_decimal *value1, s21_decimal *value2) { // do: переполнение мантиссы в случае > 28(сокращаем скейл и домнажаем) 
     int value1_scale = s21_get_scale(value1);
@@ -142,7 +168,6 @@ void s21_normalization(s21_decimal *value1, s21_decimal *value2) { // do: пер
         s21_set_scale(value1, new_scale);
         s21_set_scale(value2, new_scale);
     }
-
 }
 
 int s21_get_sign(s21_decimal *res) {
@@ -236,23 +261,90 @@ void s21_init_decimal(s21_decimal *value) {
     value->bits[1] = 0;
     value->bits[2] = 0;
     value->bits[3] = 0;
-  }
-
-typedef struct {
-    unsigned int bits[6];  // 192-битная мантисса (96*2)
-    int scale;             // масштаб 
-    int sign;              // знак 
-} s21_big_decimal;
-
-void s21_from_decimal_to_big(s21_decimal dec, s21_big_decimal *big) {
-    big->bits[0] = dec.bits[0];
-    big->bits[1] = dec.bits[1];
-    big->bits[2] = dec.bits[2];
-    big->bits[3] = 0;
-    big->bits[4] = 0;
-    big->bits[5] = 0;
-    big->scale = s21_get_scale(&dec);
-    big->sign = s21_get_sign(&dec);
 }
 
+typedef struct s21_big_decimal {
+  int bits[8];
+} s21_big_decimal;
 
+void s21_big_set_scale(s21_big_decimal *res, unsigned char scale) { //unsigned пч нет отриц, char потому что он как раз 8 бит 
+    res->bits[7] &= ~(0xFF << 16);
+    res->bits[7] |= ((int)scale << 16); // приводим к int так как работаем со структурой интов 
+}
+
+int s21_big_get_scale(s21_big_decimal res) {
+    return (res.bits[7] >> 16) & 0xFF;
+}
+
+int s21_big_get_sign(s21_big_decimal res) {
+    return (res.bits[7] >> 31) & 1;
+}
+
+void s21_big_set_sign(s21_big_decimal *res, int sign) { //а где проверять, чтобы знак был норм? 
+    unsigned int mask_for_last_bit = 1<<31;
+    if (sign) {
+        res->bits[7] |= mask_for_last_bit;
+    } else {
+        res->bits[7] &= ~mask_for_last_bit;
+    }
+}
+
+int s21_big_is_overflow(s21_big_decimal num) {
+    int flag = 0;
+    for (int i = 3; i < 8; i++) {
+        if (num.bits[i] != 0) {
+            flag = 1;
+        }
+    }
+    return flag;
+}
+
+int s21_normalize_for_arithmetic(s21_big_decimal *big_value, s21_decimal *value) {
+    int err_code = ARITHM_OK;
+    s21_init_decimal(&value);
+
+    int big_scale = s21_big_get_scale(*big_value);
+
+    int diff = big_scale - 28;
+
+    if (diff > 0) {
+
+    }
+
+    return err_code;
+}
+
+int s21_from_big_to_decimal(s21_big_decimal big_value, s21_decimal *value) {
+    int err_code = ARITHM_OK;
+    s21_init_decimal(&value);
+
+    int big_sign = s21_big_get_sign(big_value);
+    int big_scale = s21_big_get_scale(big_value);
+
+    if (s21_big_is_overflow(big_value)) {
+        //test for normalize
+        //if norm bank and turn into decimal
+        //else GR_EQ_ETERN
+    } else {
+        for (int i = 0; i<3; i++) {
+            value->bits[i] = big_value.bits[i];
+        }
+    }
+    return err_code;
+}
+
+int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
+  int err_code = ARITHM_OK;
+  s21_init_decimal(result);
+  int sign1 = s21_get_sign(&value_1);
+  int sign2 = s21_get_sign(&value_2);
+  s21_normalization(&value_1, &value_2); //тут не буlет проверки, что лоба децимала норм, но вроде нам проверять нужно только результат, как сказали другие пиры 
+
+  if (sign1 == sign2){
+    s21_set_sign(result, 0);
+  } else 
+  // нужно проверить, что оба децимала норм
+  // проверить знаки децималов
+
+  return err_code;
+}
