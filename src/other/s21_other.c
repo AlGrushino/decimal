@@ -123,7 +123,6 @@ int s21_mult_by_ten_times_safe(s21_decimal *value, int times) {
             *value = tmp;
         }
     }
-    
     return err_code;
 }
 
