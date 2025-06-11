@@ -10,6 +10,14 @@ void s21_print_binary(s21_decimal res) {
   }
 }
 
+void s21_print_big_binary(s21_big_decimal res) {
+  for (int i2 = 7; i2>=0; i2--) {
+    for (int i = 31; i >= 0; i--) {
+      printf("%d", (res.bits[i2] >> i) & 1);
+    }
+    printf(" ");
+  }
+}
 
 void s21_mult_by_ten(s21_decimal *res) { // <<1 умножение на два: (<<1 + <<3) == умножение на 10
   unsigned int temp_mantissa[3] = {res->bits[0], res->bits[1], res->bits[2]}; //92 бита
@@ -249,10 +257,6 @@ void s21_init_decimal(s21_decimal *value) {
 }
 
 
-typedef struct s21_big_decimal {
-int bits[8];
-} s21_big_decimal;
-
 void s21_init_big_decimal(s21_big_decimal *value) {
   for (int i = 0; i<8; i++) {
       value->bits[i] = 0;
@@ -285,7 +289,10 @@ int s21_big_is_overflow(s21_big_decimal num) {
   int flag = 0;
   for (int i = 3; i < 7 && !flag; i++) {
       if (num.bits[i] != 0) {
-          flag = 1;
+        printf("BIG OVERFLOW:\n");
+        s21_print_big_binary(num);
+        printf("\n");
+        flag = 1;
       }
   }
   return flag;
@@ -294,59 +301,72 @@ int s21_big_is_overflow(s21_big_decimal num) {
 int s21_big_mult_by_ten(s21_big_decimal *res) {
   int err_code = ARITHM_OK;
   int sign = s21_big_get_sign(*res);
-  unsigned int temp_mantissa[7] = {0}; 
-  for (int i = 0; i < 7; i++) temp_mantissa[i] = res->bits[i];
+
+  // unsigned int temp_mantissa[7] = {0}; 
+  // for (int i = 0; i < 7; i++) temp_mantissa[i] = res->bits[i];
+
   unsigned long long temp = 0; 
   unsigned long long overflow = 0;
-  for (int i = 0; i<7; i++) {
-      temp = ((unsigned long long)res->bits[i] << 1) + overflow;
-      temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF); //0xFFFFFFFF = 32 бита
-      overflow = temp >> 32;
-  }
-  unsigned int doubled_mantissa[7] = {0};
-  for (int i = 0; i < 7; i++) doubled_mantissa[i] = temp_mantissa[i];
-  overflow = 0; // нужно ли занулять temp_mantissa?
-  for (int i = 0; i<7; i++) {
-      temp = ((unsigned long long)res->bits[i] << 3) + overflow;
-      temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
-      overflow = temp >> 32;
-  }
+
+  unsigned int original[7] = {0};
+  for (int i = 0; i < 7; i++) original[i] = res->bits[i];
+
   unsigned int eight_mantissa[7] = {0};
-  for (int i = 0; i < 7; i++) eight_mantissa[i] = temp_mantissa[i];
+  unsigned int doubled_mantissa[7] = {0};
+
+  for (int i = 0; i<7; i++) {
+      temp = ((unsigned long long)original[i] << 1) + overflow;
+      doubled_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF); //0xFFFFFFFF = 32 бита
+      overflow = temp >> 32;
+  }
+  
+  // for (int i = 0; i < 7; i++) doubled_mantissa[i] = temp_mantissa[i];
+  overflow = 0; // нужно ли занулять temp_mantissa?
+
+  for (int i = 0; i<7; i++) {
+      temp = ((unsigned long long)original[i] << 3) + overflow;
+      eight_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
+      overflow = temp >> 32;
+  }
+  
+  // for (int i = 0; i < 7; i++) eight_mantissa[i] = temp_mantissa[i];
   overflow = 0; 
+
   for (int i = 0; i < 7; i++) {
       temp = (unsigned long long)doubled_mantissa[i] + eight_mantissa[i] + overflow;
       res->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
       overflow = temp >> 32;
   }
-  if (overflow) { //?????
+  //if (overflow) { //?????
+  if (overflow) {
       if (sign) err_code = LE_EQ_ETERN;
       else err_code = GR_EQ_ETERN;
+      printf("s21_big_mult_by_ten.if\n");
   }
   
   return err_code;
 }
 
-int s21_normalize_for_arithmetic(s21_big_decimal *big_value, s21_decimal *value) {
-  int err_code = ARITHM_OK;
-  s21_init_decimal(value);
+// int s21_normalize_for_arithmetic(s21_big_decimal *big_value, s21_decimal *value) {
+//   int err_code = ARITHM_OK;
+//   s21_init_decimal(value);
 
-  int big_scale = s21_big_get_scale(*big_value);
+//   int big_scale = s21_big_get_scale(*big_value);
 
-  int diff = big_scale - 28;
+//   int diff = big_scale - 28;
 
-  if (diff > 0) {
-      while (diff && !err_code) {
-          err_code = s21_big_mult_by_ten(big_value);
-          diff--;
-      }
-      if (!err_code) {
-          s21_big_set_scale(big_value, 28);
-      }
-  }
+//   if (diff > 0) {
+//       while (diff && !err_code) {
+//           err_code = s21_big_mult_by_ten(big_value);
+//           diff--;
+//       }
+//       if (!err_code) {
+//           s21_big_set_scale(big_value, 28);
+//       }
+//   }
 
-  return err_code;
-}
+//   return err_code;
+// }
 
 void s21_big_div_by_10(s21_big_decimal *value, unsigned int *remainder) {
   unsigned long long temp = 0;
@@ -375,9 +395,49 @@ void s21_from_decimal_to_big(const s21_decimal dec, s21_big_decimal *big) {
   big->bits[7] = dec.bits[3];  
 }
 
+int is_half_or_more(unsigned int remainder, unsigned int divisor) {
+  return remainder * 2 >= divisor;
+}
+
+int s21_big_div_by_ten(s21_big_decimal *value) {
+  unsigned long long temp = 0;
+  unsigned long long carry = 0;
+  unsigned int remainder = 0;
+
+   int err_code = ARITHM_OK;
+  int sign = s21_big_get_sign(*value);
+
+
+  for (int i = 6; i >= 0; i--) {
+    temp = (carry << 32) | (unsigned int)value->bits[i];
+    value->bits[i] = (unsigned int)(temp / 10);
+    remainder = (unsigned int)(temp % 10);
+    carry = temp / 10;
+  }
+
+  if (is_half_or_more(remainder, 10)) {
+    carry = 1;
+    for (int i = 0; i < 7 && carry; i++) {
+      temp = (unsigned long long)value->bits[i] + carry;
+      value->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
+      carry = temp >> 32;
+    }
+  }
+
+    if (carry) {
+      if (sign) err_code = LE_EQ_ETERN;
+      else err_code = GR_EQ_ETERN;
+      printf("s21_big_div_by_ten.if\n");
+  }
+
+
+  return err_code;
+}
+
 int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
   int err_code = ARITHM_OK;
   int scale = s21_big_get_scale(big);
+  printf("scaleEE: %d\n", scale);
   int sign = s21_big_get_sign(big);
   printf("sign:%d\n", sign);
 
@@ -386,20 +446,30 @@ int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
 
   s21_init_decimal(dec);
 
-  while ((s21_big_is_overflow(big) || scale > 28) && scale > 0) {
+  while (scale > 28) {
+    if (s21_big_div_by_ten(&big)) {
+      if (!sign) err_code = GR_EQ_ETERN;
+      else err_code = LE_EQ_ETERN;
+      printf("while\n");
+      break;
+    }
+  }
+
+  while ((s21_big_is_overflow(big)) && !err_code && scale > 0) {
     remainder = 0;
     s21_big_div_by_10(&big, &remainder);
     scale--;
+    printf("s21_from_decimal_to_big.while\n");
   }
 
-  if (original_scale != scale && !s21_big_is_overflow(big)) {
+  if (original_scale != scale && !s21_big_is_overflow(big) && !err_code) {
       if (remainder > 5 || (remainder == 5 && (big.bits[0] & 1))) {
           s21_big_round_up(&big);
           printf("Round\n");
       }
   }
 
-  if (!s21_big_is_overflow(big)) {
+  if (!s21_big_is_overflow(big) && !err_code) {
     printf("dec->bits\n");
     dec->bits[0] = big.bits[0];
     dec->bits[1] = big.bits[1];
@@ -408,7 +478,7 @@ int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
     s21_set_sign(dec, sign);
     s21_set_scale(dec, scale);
     // printf("scale: %d\n", scale);
-  } else {
+  } else if (s21_big_is_overflow(big)){
     printf("overflow = 1\n");
     if (!sign) err_code = GR_EQ_ETERN;
     else err_code = LE_EQ_ETERN;
@@ -417,14 +487,6 @@ int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
   return err_code;  
 }
 
-void s21_print_big_binary(s21_big_decimal res) {
-  for (int i2 = 7; i2>=0; i2--) {
-    for (int i = 31; i >= 0; i--) {
-      printf("%d", (res.bits[i2] >> i) & 1);
-    }
-    printf(" ");
-  }
-}
 
 
 int main ()
@@ -435,15 +497,15 @@ int main ()
   s21_set_scale(&num1, 10);
   s21_set_scale(&num2, 10);
 
-  s21_big_decimal big_num1 = {{15000, 20, 0, 0, 0, 0, 0, 0}};
-  s21_big_decimal big_num2 = {{1500, 20, 30, 40, 0, 0, 0, 0}};
-  s21_big_set_scale(&big_num1, 255);
-  s21_big_set_scale(&big_num2, 255);
+  s21_big_decimal big_num1 = {{15000, 0, 0, 0, 0, 0, 0, 0}};
+  s21_big_decimal big_num2 = {{1500, 20, 0, 0, 0, 0, 0, 0}};
+  s21_big_set_scale(&big_num1, 40);
+  s21_big_set_scale(&big_num2, 28);
   // s21_from_decimal_to_big(num1, &big_num1);
   // s21_from_decimal_to_big(num2, &big_num2);
 
   int res1 = s21_from_big_to_decimal(big_num1, &num1);
-  int res2 = s21_from_big_to_decimal(big_num2, &num2);
+  // int res2 = s21_from_big_to_decimal(big_num2, &num2);
 
 
   // s21_normalization(&num1, &num2);
@@ -455,10 +517,10 @@ int main ()
   printf("BIG:\n");
   s21_print_big_binary(big_num1);
   printf("\n");
-  s21_print_big_binary(big_num2);
-  printf("\n");
+  // s21_print_big_binary(big_num2);
+  // printf("\n");
   printf("res1: %d\n", res1);
-  printf("res2: %d\n", res2);
+  // printf("res2: %d\n", res2);
 
 
 
