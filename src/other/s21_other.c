@@ -297,132 +297,182 @@ void s21_big_set_sign(s21_big_decimal *res, int sign) { //а где провер
 }
 
 int s21_big_is_overflow(s21_big_decimal num) {
-    int flag = 0;
-    for (int i = 3; i < 7; i++) {
-        if (num.bits[i] != 0) {
-            flag = 1;
-        }
-    }
-    return flag;
+  int flag = 0;
+  for (int i = 3; i < 7 && !flag; i++) {
+      if (num.bits[i] != 0) {
+        flag = 1;
+      }
   }
+  return flag;
+}
 
-int s21_big_mult_by_ten(s21_big_decimal *res) {
-    int err_code = ARITHM_OK;
-    int sign = s21_big_get_sign(*res);
-    unsigned int temp_mantissa[7] = {0}; 
-    for (int i = 0; i < 7; i++) temp_mantissa[i] = res->bits[i];
-    unsigned long long temp = 0; 
-    unsigned long long overflow = 0;
-    for (int i = 0; i<7; i++) {
-        temp = ((unsigned long long)res->bits[i] << 1) + overflow;
-        temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF); //0xFFFFFFFF = 32 бита
-        overflow = temp >> 32;
-    }
-    unsigned int doubled_mantissa[7] = {0};
-    for (int i = 0; i < 7; i++) doubled_mantissa[i] = temp_mantissa[i];
-    overflow = 0; // нужно ли занулять temp_mantissa?
-    for (int i = 0; i<7; i++) {
-        temp = ((unsigned long long)res->bits[i] << 3) + overflow;
-        temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
-        overflow = temp >> 32;
-    }
-    unsigned int eight_mantissa[7] = {0};
-    for (int i = 0; i < 7; i++) eight_mantissa[i] = temp_mantissa[i];
-    overflow = 0; 
-    for (int i = 0; i < 7; i++) {
-        temp = (unsigned long long)doubled_mantissa[i] + eight_mantissa[i] + overflow;
-        res->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
-        overflow = temp >> 32;
-    }
-    if (overflow) { //?????
-        if (sign) err_code = LE_EQ_ETERN;
-        else err_code = GR_EQ_ETERN;
-    }
+// int s21_big_mult_by_ten(s21_big_decimal *res) {
+//     int err_code = ARITHM_OK;
+//     int sign = s21_big_get_sign(*res);
+//     unsigned int temp_mantissa[7] = {0}; 
+//     for (int i = 0; i < 7; i++) temp_mantissa[i] = res->bits[i];
+//     unsigned long long temp = 0; 
+//     unsigned long long overflow = 0;
+//     for (int i = 0; i<7; i++) {
+//         temp = ((unsigned long long)res->bits[i] << 1) + overflow;
+//         temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF); //0xFFFFFFFF = 32 бита
+//         overflow = temp >> 32;
+//     }
+//     unsigned int doubled_mantissa[7] = {0};
+//     for (int i = 0; i < 7; i++) doubled_mantissa[i] = temp_mantissa[i];
+//     overflow = 0; // нужно ли занулять temp_mantissa?
+//     for (int i = 0; i<7; i++) {
+//         temp = ((unsigned long long)res->bits[i] << 3) + overflow;
+//         temp_mantissa[i] = (unsigned int)(temp & 0xFFFFFFFF);
+//         overflow = temp >> 32;
+//     }
+//     unsigned int eight_mantissa[7] = {0};
+//     for (int i = 0; i < 7; i++) eight_mantissa[i] = temp_mantissa[i];
+//     overflow = 0; 
+//     for (int i = 0; i < 7; i++) {
+//         temp = (unsigned long long)doubled_mantissa[i] + eight_mantissa[i] + overflow;
+//         res->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
+//         overflow = temp >> 32;
+//     }
+//     if (overflow) { //?????
+//         if (sign) err_code = LE_EQ_ETERN;
+//         else err_code = GR_EQ_ETERN;
+//     }
     
-    return err_code;
-}
+//     return err_code;
+// }
 
-int s21_normalize_for_arithmetic(s21_big_decimal *big_value, s21_decimal *value) {
-    int err_code = ARITHM_OK;
-    s21_init_decimal(value);
+// int s21_normalize_for_arithmetic(s21_big_decimal *big_value, s21_decimal *value) {
+//     int err_code = ARITHM_OK;
+//     s21_init_decimal(value);
 
-    int big_scale = s21_big_get_scale(*big_value);
+//     int big_scale = s21_big_get_scale(*big_value);
 
-    int diff = big_scale - 28;
+//     int diff = big_scale - 28;
 
-    if (diff > 0) {
-        while (diff && !err_code) {
-            err_code = s21_big_mult_by_ten(big_value);
-            diff--;
-        }
-        if (!err_code) {
-            s21_big_set_scale(big_value, 28);
-        }
-    }
+//     if (diff > 0) {
+//         while (diff && !err_code) {
+//             err_code = s21_big_mult_by_ten(big_value);
+//             diff--;
+//         }
+//         if (!err_code) {
+//             s21_big_set_scale(big_value, 28);
+//         }
+//     }
 
-    return err_code;
-}
+//     return err_code;
+// }
 
 void s21_big_div_by_10(s21_big_decimal *value, unsigned int *remainder) {
-    unsigned long long temp = 0;
-    *remainder = 0;
+  unsigned long long temp = 0;
+  *remainder = 0;
 
-    for (int i = 6; i >= 0; i--) {
-        temp = ((unsigned long long)(*remainder) << 32) | value->bits[i];
-        value->bits[i] = (unsigned int)(temp / 10);
-        *remainder = (unsigned int)(temp % 10);
-    }
+  for (int i = 6; i >= 0; i--) {
+      temp = ((unsigned long long)(*remainder) << 32) | value->bits[i];
+      value->bits[i] = (unsigned int)(temp / 10);
+      *remainder = (unsigned int)(temp % 10);
+  }
 }
 
 void s21_big_round_up(s21_big_decimal *value) {
-    for (int i = 0; i < 7; i++) {
-        value->bits[i]++;
-        if (value->bits[i] != 0)
-            break;
-    }
+  for (int i = 0; i < 7; i++) {
+      value->bits[i]++;
+      if (value->bits[i] != 0)
+          break;
+  }
 }
 
 void s21_from_decimal_to_big(const s21_decimal dec, s21_big_decimal *big) {
-    s21_init_big_decimal(big);
-    big->bits[0] = dec.bits[0];
-    big->bits[1] = dec.bits[1];
-    big->bits[2] = dec.bits[2];
-    big->bits[7] = dec.bits[3];  
+  s21_init_big_decimal(big);
+  big->bits[0] = dec.bits[0];
+  big->bits[1] = dec.bits[1];
+  big->bits[2] = dec.bits[2];
+  big->bits[7] = dec.bits[3];  
+}
+
+int is_half_or_more(unsigned int remainder, unsigned int divisor) {
+  return remainder * 2 >= divisor;
+}
+
+int s21_big_div_by_ten(s21_big_decimal *value) {
+  unsigned long long temp = 0;
+  unsigned long long carry = 0;
+  unsigned int remainder = 0;
+
+  int scale = s21_big_get_scale(*value);
+
+  int err_code = ARITHM_OK;
+  int sign = s21_big_get_sign(*value);
+
+
+  for (int i = 6; i >= 0; i--) {
+    temp = (carry << 32) | (unsigned int)value->bits[i];
+    value->bits[i] = (unsigned int)(temp / 10);
+    carry = temp % 10;
+  }
+
+  remainder = (unsigned int)carry;
+
+  if (is_half_or_more(remainder, 10)) {
+    int round_carry = 1;
+    for (int i = 0; i < 7 && round_carry; i++) {
+      temp = (unsigned long long)value->bits[i] + round_carry;
+      value->bits[i] = (unsigned int)(temp & 0xFFFFFFFF);
+      round_carry = temp >> 32;
+    }
+
+    if (round_carry) {
+      if (sign) err_code = LE_EQ_ETERN;
+      else err_code = GR_EQ_ETERN;
+    }
+  }
+
+  return err_code;
 }
 
 int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
-    int err_code = ARITHM_OK;
-    int scale = s21_big_get_scale(big);
-    int sign = s21_big_get_sign(big);
+  int err_code = ARITHM_OK;
+  int scale = s21_big_get_scale(big);
+  int sign = s21_big_get_sign(big);
 
-    unsigned int remainder = 0;
-    int original_scale = scale;
+  unsigned int remainder = 0;
+  int original_scale = scale;
 
-    s21_init_decimal(dec);
+  s21_init_decimal(dec);
 
-    while ((s21_big_is_overflow(big) || scale > 28) && scale > 0) {
-        s21_big_div_by_10(&big, &remainder);
-        scale--;
+  while (scale > 28) {
+    if (s21_big_div_by_ten(&big)) {
+      if (!sign) err_code = GR_EQ_ETERN;
+      else err_code = LE_EQ_ETERN;
+      break;
     }
- 
-    if (original_scale != scale && !s21_big_is_overflow(big)) {
-        if (remainder > 5 || (remainder == 5 && (big.bits[0] & 1))) {
-            s21_big_round_up(&big);
-        }
-    }
+    scale--;
+  }
 
-    if (!s21_big_is_overflow(big)) {
-        dec->bits[0] = big.bits[0];
-        dec->bits[1] = big.bits[1];
-        dec->bits[2] = big.bits[2];
-        dec->bits[3] = 0;
-        s21_set_sign(dec, sign);
-        s21_set_scale(dec, scale);
-    } else {
-        if (!sign) err_code = GR_EQ_ETERN;
-        else err_code = LE_EQ_ETERN;
-    }   
-    return err_code;  
+  while ((s21_big_is_overflow(big)) && !err_code && scale > 0) {
+    remainder = 0;
+    s21_big_div_by_10(&big, &remainder);
+    scale--;
+  }
+
+  if (original_scale != scale && !s21_big_is_overflow(big) && !err_code) {
+      if (remainder > 5 || (remainder == 5 && (big.bits[0] & 1))) {
+          s21_big_round_up(&big);
+      }
+  }
+
+  if (!s21_big_is_overflow(big) && !err_code) {
+    dec->bits[0] = big.bits[0];
+    dec->bits[1] = big.bits[1];
+    dec->bits[2] = big.bits[2];
+    dec->bits[3] = 0;
+    s21_set_sign(dec, sign);
+    s21_set_scale(dec, scale);
+  } else if (s21_big_is_overflow(big)){
+    if (!sign) err_code = GR_EQ_ETERN;
+    else err_code = LE_EQ_ETERN;
+  } 
+  return err_code;  
 }
 
 int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
