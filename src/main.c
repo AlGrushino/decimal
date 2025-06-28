@@ -452,7 +452,6 @@ int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
     remainder = 0;
     s21_big_div_by_10(&big, &remainder);
     scale--;
-    printf("While2\n");
   }
 
   if (original_scale != scale && !s21_big_is_overflow(big) && !err_code) {
@@ -475,44 +474,95 @@ int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
   return err_code;  
 }
 
+void s21_big_mul(s21_big_decimal big_val1, s21_big_decimal big_val2, s21_big_decimal *big_res) {
+  int big_scale1 = s21_big_get_scale(big_val1);
+  int big_scale2 = s21_big_get_scale(big_val2);
+  int big_result_scale = big_scale1 + big_scale2;
 
+  unsigned long long temp = 0;
+  unsigned long long carry = 0;
+
+  for (int i = 0; i < 3; i++) {
+    carry = 0;
+    for (int i2 = 0; i2 < 3; i2++) {
+      int k = i+i2;
+      temp = (unsigned long long)big_val1.bits[i] * (unsigned long long)big_val2.bits[i2]+ (unsigned long long)big_res->bits[k] + carry;
+      big_res->bits[k] = (unsigned int)(temp & 0xFFFFFFFF);
+      carry = temp >> 32;
+      }
+    int k2 = i + 3;
+    while (carry!=0) {
+      unsigned long long sum = (unsigned long long)big_res->bits[k2] + carry;
+    }
+  }
+}
+
+
+int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) { //проверить что децималы норм
+  int err_code = ARITHM_OK;
+  s21_init_decimal(result);
+
+  int sign1 = s21_get_sign(&value_1);
+  int sign2 = s21_get_sign(&value_2);
+
+  s21_normalization(&value_1, &value_2); //тут не буlет проверки, что лоба децимала норм, но вроде нам проверять нужно только результат, как сказали другие пиры 
+  int scale1 = s21_get_scale(&value_1);
+  int scale2 = s21_get_scale(&value_2);
+  int result_scale = scale1 + scale2; //?
+
+  s21_big_decimal big_val1; 
+  s21_big_decimal big_val2;
+  s21_big_decimal big_res;
+
+
+  s21_from_decimal_to_big(value_1, &big_val1);
+  s21_from_decimal_to_big(value_2, &big_val2);
+
+    
+  s21_set_sign(result, !(sign1 == sign2));
+  s21_big_mul(big_val1, big_val2, &big_res);
+  s21_big_set_scale(&big_res, result_scale);
+
+
+  err_code = s21_from_big_to_decimal(big_res, result);
+
+  return err_code;
+}
 
 int main ()
 {
   printf("\n");
-  s21_decimal num1 = {{150, 0, 0, 0}};
-  s21_decimal num2 = {{150, 0, 0, 0}};
-  s21_set_scale(&num1, 10);
-  s21_set_scale(&num2, 10);
+  s21_decimal num1 = {{15, 0, 0, 0}};
+  s21_decimal num2 = {{15, 0, 0, 0}};
+  s21_decimal res_decimal;
+  s21_set_scale(&num1, 0);
+  s21_set_scale(&num2, 0);
 
   s21_big_decimal big_num1 = {{1500, 30, 30, 1, 0, 0, 0, 0}};
   s21_big_decimal big_num2 = {{1500, 20, 0, 0, 0, 0, 0, 0}};
-  s21_big_set_scale(&big_num1, 0);
+  s21_big_set_scale(&big_num1, 50);
   s21_big_set_scale(&big_num2, 28);
   // s21_from_decimal_to_big(num1, &big_num1);
   // s21_from_decimal_to_big(num2, &big_num2);
 
-  int res1 = s21_from_big_to_decimal(big_num1, &num1);
+  // int res1 = s21_from_big_to_decimal(big_num1, &num1);
   // int res2 = s21_from_big_to_decimal(big_num2, &num2);
 
+  int res1 = s21_mul(num1, num2, &res_decimal);
 
   // s21_normalization(&num1, &num2);
-  s21_print_binary(num1);
+  // s21_print_binary(res_decimal);
   printf("\n");
-  // s21_print_binary(num2);
-  // printf("\n");
+  s21_print_binary(res_decimal);
+  printf("\n");
 
   // printf("BIG:\n");
-  s21_print_big_binary(big_num1);
-  printf("\n");
+  // s21_print_big_binary(big_num1);
+  // printf("\n");
   // // s21_print_big_binary(big_num2);
   // // printf("\n");
   printf("res1: %d\n", res1);
   // // printf("res2: %d\n", res2);
-
-
-
-
 
   // printf("res: %d", res);
 }
