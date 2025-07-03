@@ -491,8 +491,11 @@ void s21_big_mul(s21_big_decimal big_val1, s21_big_decimal big_val2, s21_big_dec
       carry = temp >> 32;
       }
     int k2 = i + 3;
-    while (carry!=0) {
+    while (carry != 0 && k2 < 8) {
       unsigned long long sum = (unsigned long long)big_res->bits[k2] + carry;
+      big_res->bits[k2] = (unsigned int)(sum & 0xFFFFFFFF);
+      carry = sum >> 32;
+      k2++;
     }
   }
 }
@@ -504,24 +507,37 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) { //�
 
   int sign1 = s21_get_sign(&value_1);
   int sign2 = s21_get_sign(&value_2);
+  printf("sign1: %d\n", sign1);
+  printf("sign2: %d\n", sign2);
+
+  
 
   s21_normalization(&value_1, &value_2); //тут не буlет проверки, что лоба децимала норм, но вроде нам проверять нужно только результат, как сказали другие пиры 
   int scale1 = s21_get_scale(&value_1);
   int scale2 = s21_get_scale(&value_2);
-  int result_scale = scale1 + scale2; //?
+  int result_scale = scale1 + scale2;
 
   s21_big_decimal big_val1; 
   s21_big_decimal big_val2;
   s21_big_decimal big_res;
+  s21_init_big_decimal(&big_res);
+
+  printf("\nBIG:\n");
+  s21_print_big_binary(big_res);
+  printf("\n");
 
 
   s21_from_decimal_to_big(value_1, &big_val1);
   s21_from_decimal_to_big(value_2, &big_val2);
 
     
-  s21_set_sign(result, !(sign1 == sign2));
+  
   s21_big_mul(big_val1, big_val2, &big_res);
   s21_big_set_scale(&big_res, result_scale);
+  s21_big_set_sign(&big_res, !(sign1 == sign2));
+  printf("\nBIG:\n");
+  s21_print_big_binary(big_res);
+  printf("\n");
 
 
   err_code = s21_from_big_to_decimal(big_res, result);
@@ -532,16 +548,19 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) { //�
 int main ()
 {
   printf("\n");
-  s21_decimal num1 = {{15, 0, 0, 0}};
+  s21_decimal num1 = {{28, 0, 0, 0}};
   s21_decimal num2 = {{15, 0, 0, 0}};
   s21_decimal res_decimal;
   s21_set_scale(&num1, 0);
   s21_set_scale(&num2, 0);
+  s21_set_sign(&num1, 1);
+  s21_set_sign(&num2, 1);
 
-  s21_big_decimal big_num1 = {{1500, 30, 30, 1, 0, 0, 0, 0}};
-  s21_big_decimal big_num2 = {{1500, 20, 0, 0, 0, 0, 0, 0}};
-  s21_big_set_scale(&big_num1, 50);
-  s21_big_set_scale(&big_num2, 28);
+
+  s21_big_decimal big_num1 = {{1500, 0, 0, 0, 0, 0, 0, 0}};
+  s21_big_decimal big_num2 = {{1500, 0, 0, 0, 0, 0, 0, 0}};
+  s21_big_set_scale(&big_num1, 0);
+  s21_big_set_scale(&big_num2, 0);
   // s21_from_decimal_to_big(num1, &big_num1);
   // s21_from_decimal_to_big(num2, &big_num2);
 
