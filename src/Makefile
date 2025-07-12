@@ -16,8 +16,14 @@ all: s21_decimal.a
 clean:
 	@rm -rf *.o *.gcno *.gcda *.gcov *.a test logs
 
-s21_decimal.a: clean s21_arithmetic.o s21_comparison.o s21_converters.o s21_other.o
-	$(CC) $(CFLAGS) -c 
+s21_decimal.a: other/s21_other.o
+	ar rcs s21_decimal.a other/s21_other.o
+
+other/s21_other.o: 
+	$(CC) $(CFLAGS) -c other/s21_other.c -o other/s21_other.o
+
+# s21_arithmetic.o: s21_arithmetic.c s21_arithmetic.h
+# 	$(CC) $(CFLAGS) -c s21_arithmetic.c -o s21_arithmetic.o
 
 # test:
 # 	rm -rf test
@@ -25,22 +31,27 @@ s21_decimal.a: clean s21_arithmetic.o s21_comparison.o s21_converters.o s21_othe
 
 # bit_operations
 # bit_operations.a:
-# 	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
-# 	ar rcs bit_operations.a
+# 	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c -o bit_operations.o
+# 	ar rcs bit_operations.a bit_operations.o
 
 bit_operations.a:
 	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c -o bit_operations.o
 	ar rcs bit_operations.a bit_operations.o
 
 
-test_bit_operations:
-	@rm -rf test
-	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
-	@./test
+#test_bit_operations:
+#	@rm -rf test
+#	@$(CC) $(CFLAGS) $(GCOV) bit_operations/test.c bit_operations/bit_operations.c $(CLIBS) -o test
+#	@./test
 
-test_other:
+#test_other:
+#	@rm -rf test
+#	@$(CC) $(CFLAGS) $(GCOV) other/test.c other/s21_other.c $(CLIBS) -o test
+#	@./test
+
+test_mul: s21_decimal.a 
 	@rm -rf test
-	@$(CC) $(CFLAGS) $(GCOV) other/test.c other/s21_other.c $(CLIBS) -o test
+	@$(CC) $(CFLAGS) $(GCOV) test_mul.c s21_decimal.a -o test $(CLIBS)
 	@./test
 
 gcov_bit_operations: test_bit_operations

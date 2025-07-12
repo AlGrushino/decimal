@@ -440,34 +440,37 @@ int s21_from_big_to_decimal(s21_big_decimal big, s21_decimal *dec) {
   s21_init_decimal(dec);
 
   while (scale > 28) {
-    if (s21_big_div_by_ten(&big)) {
-      if (!sign) err_code = GR_EQ_ETERN;
-      else err_code = LE_EQ_ETERN;
-      break;
-    }
-    scale--;
-  }
-
-  while ((s21_big_is_overflow(big)) && !err_code && scale > 0) {
-    remainder = 0;
     s21_big_div_by_10(&big, &remainder);
     scale--;
   }
 
-  if (original_scale != scale && !s21_big_is_overflow(big) && !err_code) {
-      if (remainder > 5 || (remainder == 5 && (big.bits[0] & 1))) {
-          s21_big_round_up(&big);
-      }
+  s21_big_decimal rounded = big;
+  int final_scale = scale;
+  unsigned int round_remainder = 0;
+
+  while ((s21_big_is_overflow(rounded)) && final_scale > 0) {
+    s21_big_div_by_10(&rounded, &round_remainder);
+    final_scale--;
   }
 
-  if (!s21_big_is_overflow(big) && !err_code) {
-    dec->bits[0] = big.bits[0];
-    dec->bits[1] = big.bits[1];
-    dec->bits[2] = big.bits[2];
+  //if (s21_big_is_overflow(rounded)) err_code = 1;
+
+  while (s21_big_is_overflow(rounded)) {
+    s21_big_div_by_10(&rounded, &round_remainder);
+  }
+
+  if (round_remainder > 5 || (round_remainder == 5 && (rounded.bits[0] & 1)) ) {
+    s21_big_round_up(&rounded);
+  }
+
+  if (!s21_big_is_overflow(rounded) && !err_code) {
+    dec->bits[0] = rounded.bits[0];
+    dec->bits[1] = rounded.bits[1];
+    dec->bits[2] = rounded.bits[2];
     dec->bits[3] = 0;
     s21_set_sign(dec, sign);
-    s21_set_scale(dec, scale);
-  } else if (s21_big_is_overflow(big)){
+    s21_set_scale(dec, final_scale);
+  } else if (s21_big_is_overflow(rounded)){
     if (!sign) err_code = GR_EQ_ETERN;
     else err_code = LE_EQ_ETERN;
   } 
@@ -507,12 +510,7 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) { //�
 
   int sign1 = s21_get_sign(&value_1);
   int sign2 = s21_get_sign(&value_2);
-  printf("sign1: %d\n", sign1);
-  printf("sign2: %d\n", sign2);
-
   
-
-  s21_normalization(&value_1, &value_2); //тут не буlет проверки, что лоба децимала норм, но вроде нам проверять нужно только результат, как сказали другие пиры 
   int scale1 = s21_get_scale(&value_1);
   int scale2 = s21_get_scale(&value_2);
   int result_scale = scale1 + scale2;
@@ -522,23 +520,13 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) { //�
   s21_big_decimal big_res;
   s21_init_big_decimal(&big_res);
 
-  printf("\nBIG:\n");
-  s21_print_big_binary(big_res);
-  printf("\n");
-
-
   s21_from_decimal_to_big(value_1, &big_val1);
   s21_from_decimal_to_big(value_2, &big_val2);
 
-    
   
   s21_big_mul(big_val1, big_val2, &big_res);
   s21_big_set_scale(&big_res, result_scale);
   s21_big_set_sign(&big_res, !(sign1 == sign2));
-  printf("\nBIG:\n");
-  s21_print_big_binary(big_res);
-  printf("\n");
-
 
   err_code = s21_from_big_to_decimal(big_res, result);
 
@@ -547,14 +535,13 @@ int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) { //�
 
 int main ()
 {
-  printf("\n");
-  s21_decimal num1 = {{28, 0, 0, 0}};
-  s21_decimal num2 = {{15, 0, 0, 0}};
+  s21_decimal num1 = {{1000, 12371253, 0, 0}};
+  s21_decimal num2 = {{564, 32151, 281621, 0}};
   s21_decimal res_decimal;
   s21_set_scale(&num1, 0);
-  s21_set_scale(&num2, 0);
-  s21_set_sign(&num1, 1);
-  s21_set_sign(&num2, 1);
+  s21_set_scale(&num2, 3);
+  s21_set_sign(&num1, 0);
+  s21_set_sign(&num2, 0);
 
 
   s21_big_decimal big_num1 = {{1500, 0, 0, 0, 0, 0, 0, 0}};
