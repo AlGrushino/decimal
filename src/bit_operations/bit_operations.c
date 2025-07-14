@@ -217,15 +217,20 @@ unsigned int s21_get_scale(s21_decimal* decimal) {
 }
 
 bool s21_validate_decimal(s21_decimal* decimal) {
-  bool res = false;
+  bool res = true;
   unsigned int scale = s21_get_scale(decimal);
 
-  if (0 < scale && scale < 29) {
-    res = true;
-  }
-  if (res && s21_compare_to_zero(decimal)) {
+  // скейл не может быть меньше нуля, поэтому проверяем только на > 28
+  if (scale > 28 || s21_compare_to_zero(decimal)) {
     res = false;
   }
 
   return res;
+}
+
+void s21_set_scale(s21_decimal* decimal, unsigned int scale) {
+  fields field;
+  field.num = decimal->bits[3];
+  field.bits.scale = scale;
+  decimal->bits[3] = field.num;
 }

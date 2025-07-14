@@ -1182,6 +1182,56 @@ START_TEST(s21_compare_to_zero_4) {
 }
 END_TEST
 
+// s21_set_scale
+START_TEST(s21_set_scale_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+
+  s21_set_scale(&a, 1);
+  unsigned int res = s21_get_scale(&a);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_set_scale_2) {
+  s21_decimal a = {{0, 0, 0, 0}};
+
+  s21_set_scale(&a, 0);
+  unsigned int res = s21_get_scale(&a);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_set_scale_3) {
+  s21_decimal a = {{0, 0, 0, 0}};
+
+  s21_set_scale(&a, 28);
+  unsigned int res = s21_get_scale(&a);
+
+  ck_assert_int_eq(res, 28);
+}
+END_TEST
+
+// s21_validate_decimal
+START_TEST(s21_validate_decimal_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+
+  bool res_a = s21_validate_decimal(&a);
+
+  ck_assert_int_eq(res_a, 0);
+}
+END_TEST
+
+START_TEST(s21_validate_decimal_2) {
+  s21_decimal a = {{1, 0, 0, 0}};
+
+  bool res_a = s21_validate_decimal(&a);
+
+  ck_assert_int_eq(res_a, 1);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -1334,6 +1384,15 @@ int main(void) {
   tcase_add_test(tc1_1, s21_compare_to_zero_2);
   tcase_add_test(tc1_1, s21_compare_to_zero_3);
   tcase_add_test(tc1_1, s21_compare_to_zero_4);
+
+  // s21_get_scale
+  tcase_add_test(tc1_1, s21_set_scale_1);
+  tcase_add_test(tc1_1, s21_set_scale_2);
+  tcase_add_test(tc1_1, s21_set_scale_3);
+
+  // s21_validate_decimal
+  tcase_add_test(tc1_1, s21_validate_decimal_1);
+  tcase_add_test(tc1_1, s21_validate_decimal_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

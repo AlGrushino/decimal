@@ -4,11 +4,8 @@
 #include "../something.h"
 #include "stdbool.h"
 
-// bool s21_check_bit(int num, int index);
 bool s21_check_bit(unsigned int num, int index);
-// int s21_set_bit(int num, int index);
 unsigned int s21_set_bit(unsigned int num, int index);
-// int s21_unset_bit(int num, int index);
 unsigned int s21_unset_bit(unsigned int num, int index);
 bool s21_decimal_check_bit(s21_decimal* decimal, int index);
 void s21_decimal_set_bit(s21_decimal* decimal, int index);
@@ -16,11 +13,12 @@ s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index);
 s21_decimal s21_set_zero_15(s21_decimal decimal);
 s21_decimal s21_set_zero_30(s21_decimal decimal);
 int s21_get_sign(s21_decimal* decimal);
-// bool s21_remove_zeroes(s21_decimal* decimal);
 bool s21_compare_nums(s21_decimal* a, s21_decimal* b);
 unsigned int s21_get_scale(s21_decimal* decimal);
 void s21_decimal_set_sign(s21_decimal* decimal);
 bool s21_compare_sign(s21_decimal* a, s21_decimal* b);
 bool s21_compare_to_zero(s21_decimal* decimal);
+bool s21_validate_decimal(s21_decimal* decimal);
+void s21_set_scale(s21_decimal* decimal, unsigned int scale);
 
 #endif
