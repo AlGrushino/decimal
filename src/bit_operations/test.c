@@ -477,7 +477,7 @@ END_TEST
 // первый байт
 START_TEST(s21_decimal_set_bit_1) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 0);
+  s21_decimal_set_bit(&num, 0);
 
   ck_assert_int_eq(num.bits[0], 1);
 }
@@ -489,7 +489,7 @@ START_TEST(s21_decimal_set_bit_2) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, bit);
+    s21_decimal_set_bit(&num, bit);
     ck_assert_int_eq(num.bits[0], res);
 
     bit++;
@@ -502,7 +502,7 @@ END_TEST
 START_TEST(s21_decimal_set_bit_3) {
   s21_decimal num = {{0, 0, 0, 0}};
   int diff = 32;
-  num = s21_decimal_set_bit(num, diff + 0);
+  s21_decimal_set_bit(&num, diff + 0);
 
   ck_assert_int_eq(num.bits[1], 1);
 }
@@ -515,7 +515,7 @@ START_TEST(s21_decimal_set_bit_4) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, diff + bit);
+    s21_decimal_set_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[1], res);
 
     bit++;
@@ -528,7 +528,7 @@ END_TEST
 START_TEST(s21_decimal_set_bit_5) {
   s21_decimal num = {{0, 0, 0, 0}};
   int diff = 64;
-  num = s21_decimal_set_bit(num, diff + 0);
+  s21_decimal_set_bit(&num, diff + 0);
 
   ck_assert_int_eq(num.bits[2], 1);
 }
@@ -541,7 +541,7 @@ START_TEST(s21_decimal_set_bit_6) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, diff + bit);
+    s21_decimal_set_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[2], res);
 
     bit++;
@@ -568,7 +568,7 @@ START_TEST(s21_decimal_unset_bit_2) {
 
   for (size_t i = 7; i > 1; i--) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, bit);
+    s21_decimal_set_bit(&num, bit);
     ck_assert_int_eq(num.bits[0], res);
 
     num = s21_decimal_unset_bit(num, bit);
@@ -597,7 +597,7 @@ START_TEST(s21_decimal_unset_bit_4) {
 
   for (size_t i = 7; i > 1; i--) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, diff + bit);
+    s21_decimal_set_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[1], res);
 
     num = s21_decimal_unset_bit(num, diff + bit);
@@ -626,7 +626,7 @@ START_TEST(s21_decimal_unset_bit_6) {
 
   for (size_t i = 7; i > 1; i--) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, diff + bit);
+    s21_decimal_set_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[2], res);
 
     num = s21_decimal_unset_bit(num, diff + bit);
@@ -643,7 +643,7 @@ END_TEST
 // первый байт
 START_TEST(s21_decimal_check_bit_1) {
   s21_decimal num = {{0, 0, 0, 0}};
-  int res = s21_decimal_check_bit(num, 0);
+  int res = s21_decimal_check_bit(&num, 0);
 
   ck_assert_int_eq(res, 0);
 }
@@ -652,7 +652,7 @@ END_TEST
 START_TEST(s21_decimal_check_bit_2) {
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    int res = s21_decimal_check_bit(num, i);
+    int res = s21_decimal_check_bit(&num, i);
     ck_assert_int_eq(res, 0);
   }
 }
@@ -662,7 +662,7 @@ END_TEST
 START_TEST(s21_decimal_check_bit_3) {
   s21_decimal num = {{0, 0, 0, 0}};
   int diff = 32;
-  int res = s21_decimal_check_bit(num, diff + 0);
+  int res = s21_decimal_check_bit(&num, diff + 0);
 
   ck_assert_int_eq(res, 0);
 }
@@ -673,7 +673,7 @@ START_TEST(s21_decimal_check_bit_4) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 }
@@ -683,7 +683,7 @@ END_TEST
 START_TEST(s21_decimal_check_bit_5) {
   s21_decimal num = {{0, 0, 0, 0}};
   int diff = 64;
-  int res = s21_decimal_check_bit(num, diff + 0);
+  int res = s21_decimal_check_bit(&num, diff + 0);
 
   ck_assert_int_eq(res, 0);
 }
@@ -694,7 +694,7 @@ START_TEST(s21_decimal_check_bit_6) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 }
@@ -704,7 +704,7 @@ END_TEST
 // первый байт
 START_TEST(s21_decimal_check_bit_7) {
   s21_decimal num = {{1, 0, 0, 0}};
-  int res = s21_decimal_check_bit(num, 0);
+  int res = s21_decimal_check_bit(&num, 0);
 
   ck_assert_int_eq(res, 1);
 }
@@ -715,10 +715,10 @@ START_TEST(s21_decimal_check_bit_8) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, i);
+    s21_decimal_set_bit(&num, i);
     ck_assert_int_eq(num.bits[0], bit);
 
-    int res = s21_decimal_check_bit(num, i);
+    int res = s21_decimal_check_bit(&num, i);
     ck_assert_int_eq(res, 1);
 
     bit *= 2;
@@ -730,7 +730,7 @@ END_TEST
 START_TEST(s21_decimal_check_bit_9) {
   s21_decimal num = {{0, 1, 0, 0}};
   int diff = 32;
-  int res = s21_decimal_check_bit(num, diff + 0);
+  int res = s21_decimal_check_bit(&num, diff + 0);
 
   ck_assert_int_eq(res, 1);
 }
@@ -742,10 +742,10 @@ START_TEST(s21_decimal_check_bit_10) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, diff + i);
+    s21_decimal_set_bit(&num, diff + i);
     ck_assert_int_eq(num.bits[1], bit);
 
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
 
     bit *= 2;
@@ -757,7 +757,7 @@ END_TEST
 START_TEST(s21_decimal_check_bit_11) {
   s21_decimal num = {{0, 0, 1, 0}};
   int diff = 64;
-  int res = s21_decimal_check_bit(num, diff + 0);
+  int res = s21_decimal_check_bit(&num, diff + 0);
 
   ck_assert_int_eq(res, 1);
 }
@@ -769,10 +769,10 @@ START_TEST(s21_decimal_check_bit_12) {
 
   for (size_t i = 1; i < 8; i++) {
     s21_decimal num = {{0, 0, 0, 0}};
-    num = s21_decimal_set_bit(num, diff + i);
+    s21_decimal_set_bit(&num, diff + i);
     ck_assert_int_eq(num.bits[2], bit);
 
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
 
     bit *= 2;
@@ -788,27 +788,27 @@ START_TEST(s21_set_zero_15_1) {
 
   // включаем остальные биты
   for (size_t i = 16; i < 32; i++) {
-    num = s21_decimal_set_bit(num, diff + i);
-    int res = s21_decimal_check_bit(num, diff + i);
+    s21_decimal_set_bit(&num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 
   // проверяем, что нужные биты выключены
   for (size_t i = 0; i < 16; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 
   // выключаем биты и проверяем, выключены ли они
   num = s21_set_zero_15(num);
   for (size_t i = 0; i < 16; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 
   // проверяем, что остальные биты остались включены
   for (size_t i = 16; i < 32; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 }
@@ -823,21 +823,21 @@ START_TEST(s21_set_zero_15_2) {
   int counter = 0;
   for (size_t i = 0; i < 31; i++) {
     counter++;
-    num = s21_decimal_set_bit(num, diff + i);
-    int res = s21_decimal_check_bit(num, diff + i);
+    s21_decimal_set_bit(&num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 
   // выключаем биты и проверяем, выключены ли они
   num = s21_set_zero_15(num);
   for (size_t i = 0; i < 16; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 
   // // // проверяем, что остальные биты остались включены
   for (size_t i = 16; i < 31; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 }
@@ -853,21 +853,21 @@ START_TEST(s21_set_zero_30_1) {
   int counter = 0;
   for (size_t i = 0; i < 31; i++) {
     counter++;
-    num = s21_decimal_set_bit(num, diff + i);
-    int res = s21_decimal_check_bit(num, diff + i);
+    s21_decimal_set_bit(&num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 
   // выключаем биты и проверяем, выключены ли они
   num = s21_set_zero_30(num);
   for (size_t i = 24; i < 31; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 
   //  проверяем, что остальные биты остались включены
   for (size_t i = 0; i < 24; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 }
@@ -880,27 +880,27 @@ START_TEST(s21_set_zero_30_2) {
 
   // включаем остальные биты
   for (size_t i = 24; i < 31; i++) {
-    num = s21_decimal_set_bit(num, diff + i);
-    int res = s21_decimal_check_bit(num, diff + i);
+    s21_decimal_set_bit(&num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 1);
   }
 
   // проверяем, что нужные биты выключены
   for (size_t i = 0; i < 24; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 
   // выключаем биты и проверяем, выключены ли они
   num = s21_set_zero_30(num);
   for (size_t i = 24; i < 31; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 
   // проверяем, что остальные биты остались выключены
   for (size_t i = 0; i < 24; i++) {
-    int res = s21_decimal_check_bit(num, diff + i);
+    int res = s21_decimal_check_bit(&num, diff + i);
     ck_assert_int_eq(res, 0);
   }
 }
@@ -928,7 +928,7 @@ END_TEST
 // 96 + 16 + 1
 START_TEST(s21_get_scale_1) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 112);
+  s21_decimal_set_bit(&num, 112);
   unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 1);
@@ -948,9 +948,9 @@ END_TEST
 // 28
 START_TEST(s21_get_scale_3) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 114);
-  num = s21_decimal_set_bit(num, 115);
-  num = s21_decimal_set_bit(num, 116);
+  s21_decimal_set_bit(&num, 114);
+  s21_decimal_set_bit(&num, 115);
+  s21_decimal_set_bit(&num, 116);
 
   unsigned int res = s21_get_scale(&num);
 
@@ -961,7 +961,7 @@ END_TEST
 // 2
 START_TEST(s21_get_scale_4) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 113);
+  s21_decimal_set_bit(&num, 113);
   unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 2);
@@ -971,8 +971,8 @@ END_TEST
 // 3
 START_TEST(s21_get_scale_5) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 113);
-  num = s21_decimal_set_bit(num, 112);
+  s21_decimal_set_bit(&num, 113);
+  s21_decimal_set_bit(&num, 112);
 
   unsigned int res = s21_get_scale(&num);
 
@@ -983,7 +983,7 @@ END_TEST
 // 4
 START_TEST(s21_get_scale_6) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 114);
+  s21_decimal_set_bit(&num, 114);
   unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 4);
@@ -993,8 +993,8 @@ END_TEST
 // 5
 START_TEST(s21_get_scale_7) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 114);
-  num = s21_decimal_set_bit(num, 112);
+  s21_decimal_set_bit(&num, 114);
+  s21_decimal_set_bit(&num, 112);
 
   unsigned int res = s21_get_scale(&num);
 
@@ -1005,8 +1005,8 @@ END_TEST
 // 6
 START_TEST(s21_get_scale_8) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 114);
-  num = s21_decimal_set_bit(num, 113);
+  s21_decimal_set_bit(&num, 114);
+  s21_decimal_set_bit(&num, 113);
 
   unsigned int res = s21_get_scale(&num);
 
@@ -1017,9 +1017,9 @@ END_TEST
 // 7
 START_TEST(s21_get_scale_9) {
   s21_decimal num = {{0, 0, 0, 0}};
-  num = s21_decimal_set_bit(num, 114);
-  num = s21_decimal_set_bit(num, 113);
-  num = s21_decimal_set_bit(num, 112);
+  s21_decimal_set_bit(&num, 114);
+  s21_decimal_set_bit(&num, 113);
+  s21_decimal_set_bit(&num, 112);
 
   unsigned int res = s21_get_scale(&num);
 
@@ -1118,7 +1118,6 @@ END_TEST
 //   ck_assert_int_eq(res, 1);
 // }
 // END_TEST
-
 
 int main(void) {
   Suite *s1 = suite_create("Core");

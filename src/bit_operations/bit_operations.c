@@ -48,10 +48,10 @@ int s21_unset_bit(int num, int index) { return num & (~(1 << index)); }
 @param index идндекс бита, который провеярем
 @return bool, true - включён, false - выключен
 */
-bool s21_decimal_check_bit(s21_decimal decimal, int index) {
+bool s21_decimal_check_bit(s21_decimal* decimal, int index) {
   int byte = index / MAX_BITS;
   int bit = index % MAX_BITS;
-  bool res = s21_check_bit(decimal.bits[byte], bit);
+  bool res = s21_check_bit(decimal->bits[byte], bit);
 
   return res;
 }
@@ -63,12 +63,11 @@ bool s21_decimal_check_bit(s21_decimal decimal, int index) {
 @param index int - индекс бита, который включаем
 @return s21_decimal число decimal с включённым битом
 */
-s21_decimal s21_decimal_set_bit(s21_decimal decimal, int index) {
+void s21_decimal_set_bit(s21_decimal* decimal, int index) {
   int byte = index / MAX_BITS;
   int bit = index % MAX_BITS;
 
-  decimal.bits[byte] = s21_set_bit(decimal.bits[byte], bit);
-  return decimal;
+  decimal->bits[byte] = s21_set_bit(decimal->bits[byte], bit);
 }
 // Надо подумать, что возвращать из сет/ансет
 
@@ -125,11 +124,11 @@ s21_decimal s21_set_zero_30(s21_decimal decimal) {
 @param two s21_decimal
 @return bool true - числа равны, false - числа не равны
 */
-bool s21_compare_nums(s21_decimal * a, s21_decimal * b) {
+bool s21_compare_nums(s21_decimal* a, s21_decimal* b) {
   bool res = false;
 
-  if (a->bits[0] == b->bits[0] && a->bits[1] == b->bits[1] && a->bits[2] == b->bits[2])
-  {
+  if (a->bits[0] == b->bits[0] && a->bits[1] == b->bits[1] &&
+      a->bits[2] == b->bits[2]) {
     res = true;
   }
 
@@ -188,12 +187,11 @@ int s21_get_sign(s21_decimal* decimal) {
 // оставить функцию воид или возвращать ошибку?
 // bool s21_remove_zeroes(s21_decimal* decimal) {
 //   bool res = true;
-  
+
 //   if (s21_validate_decimal(decimal))
 //   {
 //     int scale = s21_get_scale(decimal);
 //   }
-  
 
 //   return res;
 // }
@@ -216,8 +214,7 @@ bool s21_validate_decimal(s21_decimal* decimal) {
   bool res = false;
   unsigned int scale = s21_get_scale(decimal);
 
-  if (0 < scale && scale < 29)
-  {
+  if (0 < scale && scale < 29) {
     res = true;
   }
   if (res && s21_compare_to_zero(decimal)) {
