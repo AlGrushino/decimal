@@ -3,7 +3,7 @@
 @breif проверяет, включён ли бит в num по index
 Сдвиг работает таким образом, что зануляются все биты слева и справа от индекса
 
-@param num int
+@param num unsigned int
 @param index int индекс бита
 @return bool true - включён, false - выключен
 Если пихать индекс вне диапазона, возвращает 0
@@ -22,9 +22,9 @@ bool s21_check_bit(unsigned int num, int index) {
 /*
 @brief включает бит в num по index
 
-@param num int
+@param num unsigned int
 @param index int индекс бита
-@return число с включённым битом
+@return число с включённым битом unsigned int
 */
 unsigned int s21_set_bit(unsigned int num, int index) {
   return num | (1 << index);
@@ -39,7 +39,7 @@ bits = 1111 1110
 
 @param num int
 @param index int индекс бита
-@return число с выключенным битом
+@return число с выключенным битом unsigned int
 */
 unsigned int s21_unset_bit(unsigned int num, int index) {
   return num & (~(1 << index));
@@ -48,7 +48,7 @@ unsigned int s21_unset_bit(unsigned int num, int index) {
 /*
 @brief Проверяет, включён ли бит по index в decimal
 
-@param decimal число s21_decimal, которое проверяем
+@param decimal число s21_decimal *, которое проверяем
 @param index идндекс бита, который провеярем
 @return bool, true - включён, false - выключен
 */
@@ -63,9 +63,9 @@ bool s21_decimal_check_bit(s21_decimal* decimal, int index) {
 /*
 @brief Включает бит s21_decimal
 
-@param decimal число s21_decimal, в котором включаем бит
+@param decimal число s21_decimal *, в котором включаем бит
 @param index int - индекс бита, который включаем
-@return s21_decimal число decimal с включённым битом
+@return void
 */
 void s21_decimal_set_bit(s21_decimal* decimal, int index) {
   int byte = index / MAX_BITS;
@@ -78,16 +78,15 @@ void s21_decimal_set_bit(s21_decimal* decimal, int index) {
 /*
 @brief Выключает бит s21_decimal
 
-@param decimal число s21_decimal, в котором выключаем бит
+@param decimal число s21_decimal *, в котором выключаем бит
 @param index int индекс бита, который выключаем
-@return s21_decimal число decimal с выключенным битом
+@return void
 */
-s21_decimal s21_decimal_unset_bit(s21_decimal decimal, int index) {
+void s21_decimal_unset_bit(s21_decimal* decimal, int index) {
   int byte = index / MAX_BITS;
   int bit = index % MAX_BITS;
 
-  decimal.bits[byte] = s21_unset_bit(decimal.bits[byte], bit);
-  return decimal;
+  decimal->bits[byte] = s21_unset_bit(decimal->bits[byte], bit);
 }
 
 /*

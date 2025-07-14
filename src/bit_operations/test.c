@@ -556,7 +556,7 @@ END_TEST
 // первый байт
 START_TEST(s21_decimal_unset_bit_1) {
   s21_decimal num = {{1, 0, 0, 0}};
-  num = s21_decimal_unset_bit(num, 0);
+  s21_decimal_unset_bit(&num, 0);
 
   ck_assert_int_eq(num.bits[0], 0);
 }
@@ -571,7 +571,7 @@ START_TEST(s21_decimal_unset_bit_2) {
     s21_decimal_set_bit(&num, bit);
     ck_assert_int_eq(num.bits[0], res);
 
-    num = s21_decimal_unset_bit(num, bit);
+    s21_decimal_unset_bit(&num, bit);
     ck_assert_int_eq(num.bits[0], 0);
 
     bit--;
@@ -584,7 +584,7 @@ END_TEST
 START_TEST(s21_decimal_unset_bit_3) {
   s21_decimal num = {{0, 1, 0, 0}};
   int diff = 32;
-  num = s21_decimal_unset_bit(num, diff + 0);
+  s21_decimal_unset_bit(&num, diff + 0);
 
   ck_assert_int_eq(num.bits[1], 0);
 }
@@ -600,7 +600,7 @@ START_TEST(s21_decimal_unset_bit_4) {
     s21_decimal_set_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[1], res);
 
-    num = s21_decimal_unset_bit(num, diff + bit);
+    s21_decimal_unset_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[1], 0);
 
     bit--;
@@ -613,7 +613,7 @@ END_TEST
 START_TEST(s21_decimal_unset_bit_5) {
   s21_decimal num = {{0, 0, 1, 0}};
   int diff = 64;
-  num = s21_decimal_unset_bit(num, diff + 0);
+  s21_decimal_unset_bit(&num, diff + 0);
 
   ck_assert_int_eq(num.bits[2], 0);
 }
@@ -629,7 +629,7 @@ START_TEST(s21_decimal_unset_bit_6) {
     s21_decimal_set_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[2], res);
 
-    num = s21_decimal_unset_bit(num, diff + bit);
+    s21_decimal_unset_bit(&num, diff + bit);
     ck_assert_int_eq(num.bits[2], 0);
 
     bit--;
