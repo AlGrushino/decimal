@@ -123,8 +123,8 @@ s21_decimal s21_set_zero_30(s21_decimal decimal) {
 /*
 @brief Сравнивает два числа s21_decimal без учёта последнего инта
 
-@param one s21_decimal
-@param two s21_decimal
+@param one s21_decimal *
+@param two s21_decimal *
 @return bool true - числа равны, false - числа не равны
 */
 bool s21_compare_nums(s21_decimal* a, s21_decimal* b) {
@@ -141,8 +141,8 @@ bool s21_compare_nums(s21_decimal* a, s21_decimal* b) {
 /*
 @brief Сравнивает знаки двух числе s21_decimal
 
-@param one s21_decimal
-@param two s21_decimal
+@param one s21_decimal *
+@param two s21_decimal *
 @return bool true - знаки равны, flase - знаки не равны
 */
 bool s21_compare_sign(s21_decimal* a, s21_decimal* b) {
@@ -158,8 +158,8 @@ bool s21_compare_sign(s21_decimal* a, s21_decimal* b) {
 /*
 @brief Сравнивает, равно ли число нулю
 
-@param one s21_decimal
-@param two s21_decimal
+@param one s21_decimal *
+@param two s21_decimal *
 @return bool true - число равно нулю, false - не оба числа равны нулю
 */
 bool s21_compare_to_zero(s21_decimal* decimal) {
@@ -175,7 +175,7 @@ bool s21_compare_to_zero(s21_decimal* decimal) {
 /*
 @brief Возвращает знак числа
 
-@param decimal s21_decimal
+@param decimal s21_decimal *
 @return res 1 - отрицательный, 0 - положительный
 */
 int s21_get_sign(s21_decimal* decimal) {
@@ -183,6 +183,12 @@ int s21_get_sign(s21_decimal* decimal) {
   return res;
 }
 
+/*
+@brief Устанавливает знак числа
+
+@param decimal s21_decimal *
+@return void
+*/
 void s21_decimal_set_sign(s21_decimal* decimal) {
   unsigned int num = decimal->bits[3];
   num = s21_set_bit(num, 31);
@@ -215,6 +221,12 @@ unsigned int s21_get_scale(s21_decimal* decimal) {
   return scale;
 }
 
+/*
+@brief Валидирует число
+
+@param decimal s21_decimal *
+@return bool scale
+*/
 bool s21_validate_decimal(s21_decimal* decimal) {
   bool res = true;
   unsigned int scale = s21_get_scale(decimal);
@@ -227,6 +239,12 @@ bool s21_validate_decimal(s21_decimal* decimal) {
   return res;
 }
 
+/*
+@brief Устанавливает scale числа
+
+@param decimal s21_decimal *
+@return void
+*/
 void s21_set_scale(s21_decimal* decimal, unsigned int scale) {
   fields field;
   field.num = decimal->bits[3];
