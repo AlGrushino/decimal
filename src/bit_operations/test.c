@@ -1142,6 +1142,46 @@ START_TEST(s21_compare_sign_2) {
 }
 END_TEST
 
+// s21_compare_to_zero
+START_TEST(s21_compare_to_zero_1) {
+  s21_decimal a = {{0, 0, 0, 2147483648}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res_a = s21_compare_to_zero(&a);
+  bool res_b = s21_compare_to_zero(&b);
+
+  ck_assert_int_eq(res_a, 1);
+  ck_assert_int_eq(res_b, 1);
+}
+END_TEST
+
+START_TEST(s21_compare_to_zero_2) {
+  s21_decimal a = {{1, 0, 0, 0}};
+
+  bool res_a = s21_compare_to_zero(&a);
+
+  ck_assert_int_eq(res_a, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_to_zero_3) {
+  s21_decimal a = {{0, 1, 0, 0}};
+
+  bool res_a = s21_compare_to_zero(&a);
+
+  ck_assert_int_eq(res_a, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_to_zero_4) {
+  s21_decimal a = {{0, 0, 1, 0}};
+
+  bool res_a = s21_compare_to_zero(&a);
+
+  ck_assert_int_eq(res_a, 0);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -1280,7 +1320,6 @@ int main(void) {
   tcase_add_test(tc1_1, s21_compare_sign_1);
   tcase_add_test(tc1_1, s21_compare_sign_2);
 
-
   // s21_compare_nums
   tcase_add_test(tc1_1, s21_compare_nums_1);
   tcase_add_test(tc1_1, s21_compare_nums_2);
@@ -1289,6 +1328,12 @@ int main(void) {
   tcase_add_test(tc1_1, s21_compare_nums_5);
   tcase_add_test(tc1_1, s21_compare_nums_6);
   tcase_add_test(tc1_1, s21_compare_nums_7);
+
+  // s21_compare_to_zero
+  tcase_add_test(tc1_1, s21_compare_to_zero_1);
+  tcase_add_test(tc1_1, s21_compare_to_zero_2);
+  tcase_add_test(tc1_1, s21_compare_to_zero_3);
+  tcase_add_test(tc1_1, s21_compare_to_zero_4);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

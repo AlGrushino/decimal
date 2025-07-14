@@ -184,7 +184,7 @@ int s21_get_sign(s21_decimal* decimal) {
   return res;
 }
 
-void s21_decimal_set_sign(s21_decimal * decimal) {
+void s21_decimal_set_sign(s21_decimal* decimal) {
   unsigned int num = decimal->bits[3];
   num = s21_set_bit(num, 31);
   decimal->bits[3] = (unsigned int)num;
