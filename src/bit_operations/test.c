@@ -908,7 +908,7 @@ END_TEST
 
 START_TEST(s21_get_sign_1) {
   s21_decimal num = {{0, 0, 0, 2147483648}};
-  int res = s21_get_sign(num);
+  int res = s21_get_sign(&num);
 
   ck_assert_int_eq(res, 1);
 }
@@ -916,7 +916,7 @@ END_TEST
 
 START_TEST(s21_get_sign_2) {
   s21_decimal num = {{0, 0, 0, 0}};
-  int res = s21_get_sign(num);
+  int res = s21_get_sign(&num);
 
   ck_assert_int_eq(res, 0);
 }
@@ -929,7 +929,7 @@ END_TEST
 START_TEST(s21_get_scale_1) {
   s21_decimal num = {{0, 0, 0, 0}};
   num = s21_decimal_set_bit(num, 112);
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 1);
 }
@@ -938,7 +938,7 @@ END_TEST
 // 0
 START_TEST(s21_get_scale_2) {
   s21_decimal num = {{0, 0, 0, 0}};
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 0);
 }
@@ -952,7 +952,7 @@ START_TEST(s21_get_scale_3) {
   num = s21_decimal_set_bit(num, 115);
   num = s21_decimal_set_bit(num, 116);
 
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 28);
 }
@@ -962,7 +962,7 @@ END_TEST
 START_TEST(s21_get_scale_4) {
   s21_decimal num = {{0, 0, 0, 0}};
   num = s21_decimal_set_bit(num, 113);
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 2);
 }
@@ -974,7 +974,7 @@ START_TEST(s21_get_scale_5) {
   num = s21_decimal_set_bit(num, 113);
   num = s21_decimal_set_bit(num, 112);
 
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 3);
 }
@@ -984,7 +984,7 @@ END_TEST
 START_TEST(s21_get_scale_6) {
   s21_decimal num = {{0, 0, 0, 0}};
   num = s21_decimal_set_bit(num, 114);
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 4);
 }
@@ -996,7 +996,7 @@ START_TEST(s21_get_scale_7) {
   num = s21_decimal_set_bit(num, 114);
   num = s21_decimal_set_bit(num, 112);
 
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 5);
 }
@@ -1008,7 +1008,7 @@ START_TEST(s21_get_scale_8) {
   num = s21_decimal_set_bit(num, 114);
   num = s21_decimal_set_bit(num, 113);
 
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 6);
 }
@@ -1021,11 +1021,104 @@ START_TEST(s21_get_scale_9) {
   num = s21_decimal_set_bit(num, 113);
   num = s21_decimal_set_bit(num, 112);
 
-  unsigned int res = s21_get_scale(num);
+  unsigned int res = s21_get_scale(&num);
 
   ck_assert_int_eq((int)res, 7);
 }
 END_TEST
+
+// s21_compare_num
+START_TEST(s21_compare_nums_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_compare_nums_2) {
+  s21_decimal a = {{1, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_nums_3) {
+  s21_decimal a = {{1, 1, 1, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_nums_4) {
+  s21_decimal a = {{0, 1, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_nums_5) {
+  s21_decimal a = {{0, 0, 1, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_nums_6) {
+  s21_decimal a = {{4294967295, 4294967295, 4294967295, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_compare_nums_7) {
+  s21_decimal a = {{4294967295, 4294967295, 4294967295, 0}};
+  s21_decimal b = {{4294967295, 4294967295, 4294967295, 0}};
+
+  bool res = s21_compare_nums(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+// s21_compare_sign
+// START_TEST(s21_compare_sign_1) {
+//   s21_decimal a = {{0, 0, 0, 0}};
+//   s21_decimal b = {{0, 0, 0, 0}};
+
+//   s21_set_sign()
+
+//   bool res = s21_compare_sign(&a, &b);
+//   ck_assert_int_eq(res, 1);
+// }
+// END_TEST
+
+// START_TEST(s21_compare_sign_2) {
+//   s21_decimal a = {{0, 0, 0, 1}};
+//   s21_decimal b = {{0, 0, 0, 0}};
+
+//   bool res = s21_compare_sign(&a, &b);
+//   ck_assert_int_eq(res, 1);
+// }
+// END_TEST
+
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -1156,6 +1249,15 @@ int main(void) {
   tcase_add_test(tc1_1, s21_get_scale_9);
   // здесь тесты доходят до 7 скейла, но границы протестированы, поэтому не вижу
   // большого смысла тестировать отсальное
+
+  // s21_compare_nums
+  tcase_add_test(tc1_1, s21_compare_nums_1);
+  tcase_add_test(tc1_1, s21_compare_nums_2);
+  tcase_add_test(tc1_1, s21_compare_nums_3);
+  tcase_add_test(tc1_1, s21_compare_nums_4);
+  tcase_add_test(tc1_1, s21_compare_nums_5);
+  tcase_add_test(tc1_1, s21_compare_nums_6);
+  tcase_add_test(tc1_1, s21_compare_nums_7);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

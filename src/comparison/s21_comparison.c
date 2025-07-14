@@ -32,58 +32,6 @@ int s21_is_equal(s21_decimal one, s21_decimal two) {
 }
 
 /*
-@brief Сравнивает два числа s21_decimal без учёта последнего инта
-
-@param one s21_decimal
-@param two s21_decimal
-@return bool true - числа равны, false - числа не равны
-*/
-bool s21_compare_num(s21_decimal one, s21_decimal two) {
-  bool res = false;
-
-  if (one.bits[0] == two.bits[0] && one.bits[1] == two.bits[1] &&
-      one.bits[2] == two.bits[2]) {
-    res = true;
-  }
-
-  return res;
-}
-
-/*
-@brief Сравнивает знаки двух числе s21_decimal
-
-@param one s21_decimal
-@param two s21_decimal
-@return bool true - знаки равны, flase - знаки не равны
-*/
-bool s21_compare_sign(s21_decimal one, s21_decimal two) {
-  bool res = false;
-
-  if (s21_get_sign(one) == s21_get_sign(two)) {
-    res = true;
-  }
-
-  return res;
-}
-
-/*
-@brief Сравнивает, равны ли два числа нулю
-
-@param one s21_decimal
-@param two s21_decimal
-@return bool true - оба числа равны нулю, false - не оба числа равны нулю
-*/
-bool s21_compare_to_zero(s21_decimal one) {
-  bool res = false;
-
-  if (0 == one.bits[0] && 0 == one.bits[1] && 0 == one.bits[2]) {
-    res = true;
-  }
-
-  return res;
-}
-
-/*
 @brief Сравнивает два числа на неравенство друг другу
 
 @param s21_decimal one
