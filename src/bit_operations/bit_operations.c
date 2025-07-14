@@ -8,7 +8,7 @@
 @return bool true - включён, false - выключен
 Если пихать индекс вне диапазона, возвращает 0
 */
-bool s21_check_bit(int num, int index) {
+bool s21_check_bit(unsigned int num, int index) {
   bool res = false;
 
   num = num & (1 << index);
@@ -26,7 +26,9 @@ bool s21_check_bit(int num, int index) {
 @param index int индекс бита
 @return число с включённым битом
 */
-int s21_set_bit(int num, int index) { return num | (1 << index); }
+unsigned int s21_set_bit(unsigned int num, int index) {
+  return num | (1 << index);
+}
 
 /*
 @brief выключает бит в num по index
@@ -39,7 +41,9 @@ bits = 1111 1110
 @param index int индекс бита
 @return число с выключенным битом
 */
-int s21_unset_bit(int num, int index) { return num & (~(1 << index)); }
+unsigned int s21_unset_bit(unsigned int num, int index) {
+  return num & (~(1 << index));
+}
 
 /*
 @brief Проверяет, включён ли бит по index в decimal
@@ -180,9 +184,11 @@ int s21_get_sign(s21_decimal* decimal) {
   return res;
 }
 
-// void s21_decimal_set_sign(s21_decimal * decimal) {
-//   s21_decimal_set_bit()
-// }
+void s21_decimal_set_sign(s21_decimal * decimal) {
+  unsigned int num = decimal->bits[3];
+  num = s21_set_bit(num, 31);
+  decimal->bits[3] = (unsigned int)num;
+}
 
 // оставить функцию воид или возвращать ошибку?
 // bool s21_remove_zeroes(s21_decimal* decimal) {

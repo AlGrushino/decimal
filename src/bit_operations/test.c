@@ -1098,26 +1098,49 @@ START_TEST(s21_compare_nums_7) {
 }
 END_TEST
 
+// s21_decimal_set_sign
+START_TEST(s21_decimal_set_sign_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 2147483648}};
+
+  s21_decimal_set_sign(&a);
+  bool res = s21_compare_sign(&a, &b);
+
+  ck_assert_int_eq(a.bits[3], 2147483648);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_decimal_set_sign_2) {
+  s21_decimal a = {{0, 0, 0, 2147483648}};
+  s21_decimal b = {{0, 0, 0, 2147483648}};
+
+  s21_decimal_set_sign(&a);
+  bool res = s21_compare_sign(&a, &b);
+
+  ck_assert_int_eq(a.bits[3], 2147483648);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
 // s21_compare_sign
-// START_TEST(s21_compare_sign_1) {
-//   s21_decimal a = {{0, 0, 0, 0}};
-//   s21_decimal b = {{0, 0, 0, 0}};
+START_TEST(s21_compare_sign_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
 
-//   s21_set_sign()
+  bool res = s21_compare_sign(&a, &b);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
 
-//   bool res = s21_compare_sign(&a, &b);
-//   ck_assert_int_eq(res, 1);
-// }
-// END_TEST
+START_TEST(s21_compare_sign_2) {
+  s21_decimal a = {{0, 0, 0, 2147483648}};
+  s21_decimal b = {{0, 0, 0, 0}};
 
-// START_TEST(s21_compare_sign_2) {
-//   s21_decimal a = {{0, 0, 0, 1}};
-//   s21_decimal b = {{0, 0, 0, 0}};
-
-//   bool res = s21_compare_sign(&a, &b);
-//   ck_assert_int_eq(res, 1);
-// }
-// END_TEST
+  bool res = s21_compare_sign(&a, &b);
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -1248,6 +1271,15 @@ int main(void) {
   tcase_add_test(tc1_1, s21_get_scale_9);
   // здесь тесты доходят до 7 скейла, но границы протестированы, поэтому не вижу
   // большого смысла тестировать отсальное
+
+  // s21_decimal_set_sign
+  tcase_add_test(tc1_1, s21_decimal_set_sign_1);
+  tcase_add_test(tc1_1, s21_decimal_set_sign_2);
+
+  // s21_compare_sign
+  tcase_add_test(tc1_1, s21_compare_sign_1);
+  tcase_add_test(tc1_1, s21_compare_sign_2);
+
 
   // s21_compare_nums
   tcase_add_test(tc1_1, s21_compare_nums_1);
