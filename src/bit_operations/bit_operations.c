@@ -130,8 +130,8 @@ s21_decimal s21_set_zero_30(s21_decimal decimal) {
 bool s21_compare_nums(s21_decimal* a, s21_decimal* b) {
   bool res = false;
 
-  if (a->bits[0] == b->bits[0] && a->bits[1] == b->bits[1] &&
-      a->bits[2] == b->bits[2]) {
+  if (a->bits[2] == b->bits[2] && a->bits[1] == b->bits[1] &&
+      a->bits[0] == b->bits[0]) {
     res = true;
   }
 

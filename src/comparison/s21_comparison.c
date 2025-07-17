@@ -7,29 +7,46 @@
 @param two s21_decimal
 @return int 1 - числа равны, 0 - числа неравны
 */
-int s21_is_equal(s21_decimal one, s21_decimal two) {
-  bool res = false;
+// int s21_is_equal(s21_decimal one, s21_decimal two) {
+//   bool res = false;
 
-  // убрать последние нули, эту функцию нужно реализовать
-  // s21_remove_zeroes();
-  // s21_decimal one_no_zeroes = s21_remove_zeroes(one);
-  // s21_decimal two_no_zeroes = s21_remove_zeroes(two);
+//   // убрать последние нули, эту функцию нужно реализовать
+//   // s21_remove_zeroes();
+//   // s21_decimal one_no_zeroes = s21_remove_zeroes(one);
+//   // s21_decimal two_no_zeroes = s21_remove_zeroes(two);
 
-  // // сравнить на ноль
-  // if (TRUE == s21_compare_to_zero(one_no_zeroes) &&
-  //     TRUE == s21_compare_to_zero(two_no_zeroes)) {
-  //   res = TRUE;
-  // }
-  // сравнить если не ноль
-  // сравнить знаки
-  // if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes, two_no_zeroes))
-  // {
-  if (false == res && true == s21_compare_sign(one, two)) {
-    res = true;
+//   // // сравнить на ноль
+//   // if (TRUE == s21_compare_to_zero(one_no_zeroes) &&
+//   //     TRUE == s21_compare_to_zero(two_no_zeroes)) {
+//   //   res = TRUE;
+//   // }
+//   // сравнить если не ноль
+//   // сравнить знаки
+//   // if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes,
+//   two_no_zeroes))
+//   // {
+//   if (false == res && true == s21_compare_sign(one, two)) {
+//     res = true;
+//   }
+
+//   return (int)res;
+// }
+
+int s21_is_equal(s21_decimal a, s21_decimal b) {
+  int res = s21_compare_sign(&a, &b);
+
+  if (res)
+  {
+    s21_normalize_scale(&a, &b);
+    res = s21_compare_nums(&a, &b);
   }
 
-  return (int)res;
+  return res;
 }
+
+// int s21_is_not_equal(s21_decimal a, s21_decimal b) {
+//   return !s21_is_equal(a, b);
+// }
 
 /*
 @brief Сравнивает два числа на неравенство друг другу
