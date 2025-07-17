@@ -300,3 +300,45 @@ int s21_mul_10(s21_decimal* decimal) {
 
   return error;
 }
+
+int s21_normalize_scale(s21_decimal* dec1, s21_decimal* dec2) {
+  int scale1 = s21_get_scale(dec1);
+  int scale2 = s21_get_scale(dec2);
+  int diff = scale1 - scale2;
+
+  if (diff > 0) {
+    while (diff != 0 && s21_mul_10(dec2) == 0) {
+      diff--;
+      scale1--;
+    }
+
+    while (diff != 0 && s21_div_10(dec1) == 0) {
+      diff--;
+      scale2++;
+    }
+
+    if (diff != 0) {
+      printf("OVERFLOW\n");
+      return 1;
+    }
+  } else if (diff < 0) {
+    while (diff != 0 && s21_mul_10(dec1) == 0) {
+      diff++;
+      scale2--;
+    }
+    while (diff != 0 && s21_div_10(dec2) == 0) {
+      diff++;
+      scale1++;
+    }
+
+    if (diff != 0) {
+      printf("OVERFLOW\n");
+      return 1;
+    }
+  }
+
+  s21_set_scale(dec1, scale1);
+  s21_set_scale(dec2, scale2);
+
+  return 0;
+}
