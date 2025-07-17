@@ -1280,6 +1280,124 @@ START_TEST(s21_mul_10_2) {
 }
 END_TEST
 
+// s21_normalize_scale
+START_TEST(s21_normalize_scale_1) {
+  s21_decimal a = {{UINT32_MAX, 0, 0, 0}};
+  s21_decimal b = {{UINT32_MAX, 0, 0, 0}};
+
+  s21_set_scale(&a, 10);
+  s21_set_scale(&b, 5);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_2) {
+  s21_decimal a = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  s21_set_scale(&a, 0);
+  s21_set_scale(&b, 28);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_3) {
+  s21_decimal a = {{UINT32_MAX, 0, 0, 0}};
+  s21_decimal b = {{UINT32_MAX, 0, 0, 0}};
+
+  s21_set_scale(&a, 5);
+  s21_set_scale(&b, 11);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_4) {
+  s21_decimal a = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  s21_set_scale(&a, 28);
+  s21_set_scale(&b, 0);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_5) {
+  s21_decimal a = {{UINT32_MAX, 0, 0, 0}};
+  s21_decimal b = {{UINT32_MAX, 0, 0, 0}};
+
+  s21_set_scale(&a, 11);
+  s21_set_scale(&b, 5);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_6) {
+  s21_decimal a = {{UINT32_MAX, 0, 0, 0}};
+  s21_decimal b = {{UINT32_MAX, 0, 0, 0}};
+
+  s21_set_scale(&a, 5);
+  s21_set_scale(&b, 5);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_7) {
+  s21_decimal a = {{UINT32_MAX, 0, 0, 0}};
+  s21_decimal b = {{100000, 0, 0, 0}};
+
+  s21_set_scale(&a, 28);
+  s21_set_scale(&b, 0);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_8) {
+  s21_decimal a = {{100000, 0, 0, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  s21_set_scale(&a, 28);
+  s21_set_scale(&b, 0);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_normalize_scale_9) {
+  s21_decimal a = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+  s21_decimal b = {{100000, 0, 0, 0}};
+
+  s21_set_scale(&a, 0);
+  s21_set_scale(&b, 28);
+
+  int res = s21_normalize_scale(&a, &b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -1450,6 +1568,17 @@ int main(void) {
   // s21_mul_10
   tcase_add_test(tc1_1, s21_mul_10_1);
   tcase_add_test(tc1_1, s21_mul_10_2);
+
+  // s21_normalize_scale
+  tcase_add_test(tc1_1, s21_normalize_scale_1);
+  tcase_add_test(tc1_1, s21_normalize_scale_2);
+  tcase_add_test(tc1_1, s21_normalize_scale_3);
+  tcase_add_test(tc1_1, s21_normalize_scale_4);
+  tcase_add_test(tc1_1, s21_normalize_scale_5);
+  tcase_add_test(tc1_1, s21_normalize_scale_6);
+  tcase_add_test(tc1_1, s21_normalize_scale_7);
+  tcase_add_test(tc1_1, s21_normalize_scale_8);
+  tcase_add_test(tc1_1, s21_normalize_scale_9);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
