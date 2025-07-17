@@ -20,5 +20,7 @@ bool s21_compare_sign(s21_decimal* a, s21_decimal* b);
 bool s21_compare_to_zero(s21_decimal* decimal);
 bool s21_validate_decimal(s21_decimal* decimal);
 void s21_set_scale(s21_decimal* decimal, unsigned int scale);
+int s21_div_10(s21_decimal* decimal);
+int s21_mul_10(s21_decimal* decimal);
 
 #endif

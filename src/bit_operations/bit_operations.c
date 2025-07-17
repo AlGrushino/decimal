@@ -258,7 +258,7 @@ void s21_set_scale(s21_decimal* decimal, unsigned int scale) {
 @param decimal s21_decimal *
 @return int
 */
-int s21_scale_down(s21_decimal* decimal) {
+int s21_div_10(s21_decimal* decimal) {
   s21_decimal res = *decimal;
   uint64_t temp;
   uint64_t remainder = 0;
@@ -270,5 +270,27 @@ int s21_scale_down(s21_decimal* decimal) {
   }
 
   *decimal = res;
-  return 0;
+
+  return remainder != 0 ? 1 : 0;
+}
+
+int s21_mul_10(s21_decimal* decimal) {
+  int error = 1;
+  s21_decimal res = *decimal;
+  uint64_t temp;
+  uint32_t reaminder = 0;
+
+  // Умножаем каждый блок на 10 + перенос
+  for (int i = 0; i < 3; i++) {
+    temp = (uint64_t)res.bits[i] * 10 + reaminder;
+    res.bits[i] = (uint32_t)temp;
+    reaminder = (uint32_t)(temp >> 32);
+  }
+
+  if (!reaminder) {
+    error = 0;
+    *decimal = res;
+  }
+
+  return error;
 }

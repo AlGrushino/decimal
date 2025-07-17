@@ -1242,6 +1242,46 @@ START_TEST(s21_validate_decimal_3) {
 }
 END_TEST
 
+// s21_div_10
+START_TEST(s21_div_10_1) {
+  s21_decimal a = {{1000000000, 0, 0, 0}};
+  int res = s21_div_10(&a);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(a.bits[0], 100000000);
+}
+END_TEST
+
+START_TEST(s21_div_10_2) {
+  s21_decimal a = {{0, 1, 0, 0}};
+  int res = s21_div_10(&a);
+
+  ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(a.bits[0], 429496729);
+}
+END_TEST
+
+// s21_mul_10
+START_TEST(s21_mul_10_1) {
+  s21_decimal a = {{0, 10, 0, 0}};
+  int res = s21_mul_10(&a);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(a.bits[1], 100);
+}
+END_TEST
+
+// START_TEST(s21_mul_10_2) {
+//   s21_decimal a = {{0, 1, 0, 0}};
+//   int res = s21_mul_10(&a);
+
+//   ck_assert_int_eq(res, 0);
+//   ck_assert_ldouble_eq(a.bits[2], 1 * pow(2, 65));
+//   ck_assert_ldouble_eq(a.bits[2], 18446744073709551616);
+//   ck_assert_int_eq(a.bits[2], 18446744073709551616);
+// }
+// END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -1404,6 +1444,14 @@ int main(void) {
   tcase_add_test(tc1_1, s21_validate_decimal_1);
   tcase_add_test(tc1_1, s21_validate_decimal_2);
   tcase_add_test(tc1_1, s21_validate_decimal_3);
+
+  // s21_div_10
+  tcase_add_test(tc1_1, s21_div_10_1);
+  tcase_add_test(tc1_1, s21_div_10_2);
+
+  // s21_mul_10
+  tcase_add_test(tc1_1, s21_mul_10_1);
+  // tcase_add_test(tc1_1, s21_mul_10_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
