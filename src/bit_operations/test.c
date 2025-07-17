@@ -1271,16 +1271,14 @@ START_TEST(s21_mul_10_1) {
 }
 END_TEST
 
-// START_TEST(s21_mul_10_2) {
-//   s21_decimal a = {{0, 1, 0, 0}};
-//   int res = s21_mul_10(&a);
+START_TEST(s21_mul_10_2) {
+  s21_decimal a = {{0, 0, UINT32_MAX, 0}};
+  int res = s21_mul_10(&a);
 
-//   ck_assert_int_eq(res, 0);
-//   ck_assert_ldouble_eq(a.bits[2], 1 * pow(2, 65));
-//   ck_assert_ldouble_eq(a.bits[2], 18446744073709551616);
-//   ck_assert_int_eq(a.bits[2], 18446744073709551616);
-// }
-// END_TEST
+  ck_assert_int_eq(res, 1);
+  ck_assert_int_eq(a.bits[2], UINT32_MAX);
+}
+END_TEST
 
 int main(void) {
   Suite *s1 = suite_create("Core");
@@ -1451,7 +1449,7 @@ int main(void) {
 
   // s21_mul_10
   tcase_add_test(tc1_1, s21_mul_10_1);
-  // tcase_add_test(tc1_1, s21_mul_10_2);
+  tcase_add_test(tc1_1, s21_mul_10_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

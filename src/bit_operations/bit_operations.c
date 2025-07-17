@@ -253,7 +253,7 @@ void s21_set_scale(s21_decimal* decimal, unsigned int scale) {
 }
 
 /*
-@brief уменьшает скейл числа
+@brief делит число на 10
 
 @param decimal s21_decimal *
 @return int
@@ -274,6 +274,12 @@ int s21_div_10(s21_decimal* decimal) {
   return remainder != 0 ? 1 : 0;
 }
 
+/*
+@brief делит остаток на 10
+
+@param decimal s21_decimal *
+@return int
+*/
 int s21_mul_10(s21_decimal* decimal) {
   int error = 1;
   s21_decimal res = *decimal;
