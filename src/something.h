@@ -7,6 +7,7 @@
 #define MAX_BITS 32
 #define ALL_BITS 128
 
+#include <inttypes.h>
 #include <stdio.h>
 
 /*

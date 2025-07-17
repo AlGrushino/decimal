@@ -251,3 +251,24 @@ void s21_set_scale(s21_decimal* decimal, unsigned int scale) {
   field.bits.scale = scale;
   decimal->bits[3] = field.num;
 }
+
+/*
+@brief уменьшает скейл числа
+
+@param decimal s21_decimal *
+@return int
+*/
+int s21_scale_down(s21_decimal* decimal) {
+  s21_decimal res = *decimal;
+  uint64_t temp;
+  uint64_t remainder = 0;
+
+  for (int i = 2; i >= 0; i--) {
+    temp = res.bits[i] + (remainder << 32);
+    res.bits[i] = (uint32_t)(temp / 10);
+    remainder = temp % 10;
+  }
+
+  *decimal = res;
+  return 0;
+}
