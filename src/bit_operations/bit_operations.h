@@ -23,5 +23,6 @@ void s21_set_scale(s21_decimal* decimal, unsigned int scale);
 int s21_div_10(s21_decimal* decimal);
 int s21_mul_10(s21_decimal* decimal);
 int s21_normalize_scale(s21_decimal* dec1, s21_decimal* dec2);
+void s21_decimal_unset_sign(s21_decimal* decimal);
 
 #endif

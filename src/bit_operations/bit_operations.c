@@ -195,6 +195,11 @@ void s21_decimal_set_sign(s21_decimal* decimal) {
   decimal->bits[3] = (unsigned int)num;
 }
 
+void s21_decimal_unset_sign(s21_decimal* decimal) {
+  unsigned int num = decimal->bits[3];
+  num = s21_unset_bit(num, 31);
+  decimal->bits[3] = (unsigned int)num;
+}
 // оставить функцию воид или возвращать ошибку?
 // bool s21_remove_zeroes(s21_decimal* decimal) {
 //   bool res = true;

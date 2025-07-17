@@ -34,19 +34,22 @@
 
 int s21_is_equal(s21_decimal a, s21_decimal b) {
   int res = s21_compare_sign(&a, &b);
-
-  if (res)
-  {
+  // пробема в том, что нормализация может не сработать, а мантисы одинаковые у
+  // децималов, поэтому сравнение может сработать
+  // либо чекать ошибку нормализации, либо сравнивать все 4 числа в структуре
+  // децимала
+  // if (res) {
+  //   res = s21_normalize_scale(&a, &b);
+  //   if (!res) {
+  //     res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
+  //   }
+  if (res) {
     s21_normalize_scale(&a, &b);
-    res = s21_compare_nums(&a, &b);
+    res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
   }
 
   return res;
 }
-
-// int s21_is_not_equal(s21_decimal a, s21_decimal b) {
-//   return !s21_is_equal(a, b);
-// }
 
 /*
 @brief Сравнивает два числа на неравенство друг другу
@@ -55,9 +58,9 @@ int s21_is_equal(s21_decimal a, s21_decimal b) {
 @param s21_decimal two
 @return int 1 - числа равны друг другу, 0 - числа не равны друг другу
 */
-// int s21_is_not_equal(s21_decimal one, s21_decimal two) {
-//   return !s21_is_equal(one, two);
-// }
+int s21_is_not_equal(s21_decimal one, s21_decimal two) {
+  return !s21_is_equal(one, two);
+}
 
 // int s21_is_greater(s21_decimal one, s21_decimal two) {}
 

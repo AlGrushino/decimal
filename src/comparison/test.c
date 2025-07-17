@@ -6,7 +6,7 @@
 // s21_compare_sing
 START_TEST(s21_compare_sign_1) {
   s21_decimal decimal = {{0, 0, 0, 2147483648}};
-  int res = s21_compare_sign(decimal, decimal);
+  int res = s21_compare_sign(&decimal, &decimal);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -15,7 +15,7 @@ START_TEST(s21_compare_sign_2) {
   s21_decimal one = {{0, 0, 0, 2147483648}};
   s21_decimal two = {{0, 0, 0, 0}};
 
-  int res = s21_compare_sign(one, two);
+  int res = s21_compare_sign(&one, &two);
 
   ck_assert_int_eq(res, 0);
 }
@@ -25,7 +25,7 @@ START_TEST(s21_compare_sign_3) {
   s21_decimal one = {{0, 0, 0, 2147483648}};
   s21_decimal two = {{0, 0, 0, 2147483648}};
 
-  int res = s21_compare_sign(one, two);
+  int res = s21_compare_sign(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -34,7 +34,7 @@ START_TEST(s21_compare_sign_4) {
   s21_decimal one = {{0, 0, 0, 0}};
   s21_decimal two = {{0, 0, 0, 2147483648}};
 
-  int res = s21_compare_sign(one, two);
+  int res = s21_compare_sign(&one, &two);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -43,7 +43,7 @@ START_TEST(s21_compare_sign_5) {
   s21_decimal one = {{0, 0, 0, 0}};
   s21_decimal two = {{0, 0, 0, 0}};
 
-  int res = s21_compare_sign(one, two);
+  int res = s21_compare_sign(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -52,7 +52,7 @@ END_TEST
 START_TEST(s21_compare_to_zero_1) {
   s21_decimal one = {{0, 0, 0, 0}};
 
-  int res = s21_compare_to_zero(one);
+  int res = s21_compare_to_zero(&one);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -60,7 +60,7 @@ END_TEST
 START_TEST(s21_compare_to_zero_2) {
   s21_decimal one = {{0, 0, 0, 2147483648}};
 
-  int res = s21_compare_to_zero(one);
+  int res = s21_compare_to_zero(&one);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -68,7 +68,7 @@ END_TEST
 START_TEST(s21_compare_to_zero_3) {
   s21_decimal one = {{1, 0, 0, 0}};
 
-  int res = s21_compare_to_zero(one);
+  int res = s21_compare_to_zero(&one);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -76,7 +76,7 @@ END_TEST
 START_TEST(s21_compare_to_zero_4) {
   s21_decimal one = {{0, 1, 0, 0}};
 
-  int res = s21_compare_to_zero(one);
+  int res = s21_compare_to_zero(&one);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -84,7 +84,7 @@ END_TEST
 START_TEST(s21_compare_to_zero_5) {
   s21_decimal one = {{0, 0, 1, 0}};
 
-  int res = s21_compare_to_zero(one);
+  int res = s21_compare_to_zero(&one);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -94,7 +94,7 @@ START_TEST(s21_compare_num_1) {
   s21_decimal one = {{0, 0, 1, 0}};
   s21_decimal two = {{0, 0, 1, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -103,7 +103,7 @@ START_TEST(s21_compare_num_2) {
   s21_decimal one = {{UINT_MAX, 0, 0, 0}};
   s21_decimal two = {{UINT_MAX, 0, 0, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -112,7 +112,7 @@ START_TEST(s21_compare_num_3) {
   s21_decimal one = {{UINT_MAX, 0, 0, 0}};
   s21_decimal two = {{0, 0, 0, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -121,7 +121,7 @@ START_TEST(s21_compare_num_4) {
   s21_decimal one = {{UINT_MAX, UINT_MAX, UINT_MAX, 21}};
   s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 42}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -130,7 +130,7 @@ START_TEST(s21_compare_num_5) {
   s21_decimal one = {{0, UINT_MAX, 0, 0}};
   s21_decimal two = {{UINT_MAX, 0, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -139,7 +139,7 @@ START_TEST(s21_compare_num_6) {
   s21_decimal one = {{0, UINT_MAX, UINT_MAX, 0}};
   s21_decimal two = {{0, UINT_MAX, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -148,7 +148,7 @@ START_TEST(s21_compare_num_7) {
   s21_decimal one = {{0, 0, 0, 0}};
   s21_decimal two = {{0, 0, 0, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -157,7 +157,7 @@ START_TEST(s21_compare_num_8) {
   s21_decimal one = {{UINT_MAX, 0, 0, 0}};
   s21_decimal two = {{UINT_MAX, 0, 0, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -166,7 +166,7 @@ START_TEST(s21_compare_num_9) {
   s21_decimal one = {{UINT_MAX, UINT_MAX, 0, 0}};
   s21_decimal two = {{UINT_MAX, UINT_MAX, 0, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -175,7 +175,7 @@ START_TEST(s21_compare_num_10) {
   s21_decimal one = {{UINT_MAX, 0, UINT_MAX, 0}};
   s21_decimal two = {{UINT_MAX, 0, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -184,7 +184,7 @@ START_TEST(s21_compare_num_11) {
   s21_decimal one = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
   s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 1);
 }
 END_TEST
@@ -193,7 +193,7 @@ START_TEST(s21_compare_num_12) {
   s21_decimal one = {{0, UINT_MAX, UINT_MAX, 0}};
   s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -202,7 +202,7 @@ START_TEST(s21_compare_num_13) {
   s21_decimal one = {{UINT_MAX, 0, UINT_MAX, 0}};
   s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 0);
 }
 END_TEST
@@ -211,8 +211,79 @@ START_TEST(s21_compare_num_14) {
   s21_decimal one = {{UINT_MAX, UINT_MAX, 0, 0}};
   s21_decimal two = {{UINT_MAX, UINT_MAX, UINT_MAX, 0}};
 
-  int res = s21_compare_num(one, two);
+  int res = s21_compare_nums(&one, &two);
   ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+// s21_is_equal
+START_TEST(s21_is_equal_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  int res = s21_is_equal(a, b);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_is_equal_2) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  s21_decimal_set_sign(&a);
+
+  int sign_a = s21_get_sign(&a);
+  int sign_b = s21_get_sign(&b);
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(sign_a, 1);
+  ck_assert_int_eq(sign_b, 0);
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_equal_3) {
+  s21_decimal a = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  s21_set_scale(&a, 28);
+
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_equal_4) {
+  s21_decimal a = {{UINT32_MAX - 1, UINT32_MAX, UINT32_MAX, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  s21_set_scale(&a, 28);
+
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+// s21_is_not_equal
+START_TEST(s21_is_not_equal_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  int res = s21_is_not_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_not_equal_2) {
+  s21_decimal a = {{1, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  int res = s21_is_not_equal(a, b);
+
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -251,6 +322,16 @@ int main(void) {
   tcase_add_test(tc1_1, s21_compare_num_12);
   tcase_add_test(tc1_1, s21_compare_num_13);
   tcase_add_test(tc1_1, s21_compare_num_14);
+
+  // s21_is_equal
+  tcase_add_test(tc1_1, s21_is_equal_1);
+  tcase_add_test(tc1_1, s21_is_equal_2);
+  tcase_add_test(tc1_1, s21_is_equal_3);
+  tcase_add_test(tc1_1, s21_is_equal_4);
+
+  // s21_is_not_equal
+  tcase_add_test(tc1_1, s21_is_not_equal_1);
+  tcase_add_test(tc1_1, s21_is_not_equal_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
