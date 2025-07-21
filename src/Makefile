@@ -54,3 +54,18 @@ gcov_comparison: test_comparison
 	@gcovr --html-self-contained --html-details -o logs/report.html
 	@echo "Building report..."
 	@open logs/report.html
+
+big_decimal.o: big_decimal/big_decimal.c
+	@$(CC) $(CFLAGS) -c big_decimal/big_decimal.c
+
+test_big_decimal: big_decimal.o bit_operations.o
+	@rm -rf test
+	@$(CC) $(CFLAGS) $(GCOV) big_decimal/test.c big_decimal/big_decimal.c bit_operations.o $(CLIBS) -o test
+	@./test
+
+gcov_big_decimal: test_big_decimal
+	@rm -rf test-test.gcda test-test.gcno
+	@mkdir logs
+	@gcovr --html-self-contained --html-details -o logs/report.html
+	@echo "Building report..."
+	@open logs/report.html
