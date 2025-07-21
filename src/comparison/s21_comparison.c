@@ -62,6 +62,34 @@ int s21_is_not_equal(s21_decimal one, s21_decimal two) {
   return !s21_is_equal(one, two);
 }
 
+// писал несколько дней назад, не помню, готова ли, пришли новые гениальные идеи
+// в голову, пока что оставлю так
+int s21_is_less(s21_decimal a, s21_decimal b) {
+  int res = s21_compare_sign(&a, &b);
+
+  if (res) {
+    s21_normalize_scale(&a, &b);
+
+    int sign1 = s21_get_sign(&a);
+    int sign2 = s21_get_sign(&b);
+    int rez = sign1 > sign2;
+
+    for (int i = 2; i >= 0 && rez == 0; i--) {
+      rez = a.bits[i] < b.bits[i];
+    }
+  } else {
+    int sign_a = s21_get_sign(&a);
+    int sign_b = s21_get_sign(&b);
+
+    if (sign_a && !sign_b) {
+      res = 1;
+    } else {
+      res = 0;
+    }
+  }
+  return res;
+}
+
 // int s21_is_greater(s21_decimal one, s21_decimal two) {}
 
 // int s21_is_greater_or_equal(s21_decimal one, s21_decimal two) {
