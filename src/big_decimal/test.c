@@ -12,13 +12,53 @@ START_TEST(s21_set_scale_big_1) {
 }
 END_TEST
 
+// s21_gets_scale_big
+START_TEST(s21_get_scale_big_1) {
+  s21_big big = {0};
+  s21_set_scale_big(&big, 1);
+  int res = s21_get_scale_big(&big);
+
+  ck_assert_int_eq(1, res);
+}
+END_TEST
+
+// s21_mul_10_big
+START_TEST(s21_mul_10_big_1) {
+  s21_big big = {{0, 0, 0, 0, 10, 0, 0, 0}};
+
+  int res = s21_mul_10_big(&big);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(big.bits[4], 100);
+}
+END_TEST
+
+START_TEST(s21_mul_10_big_2) {
+  s21_big big = {{0, 0, 0, 0, 0, UINT32_MAX, 0, 0}};
+  int res = s21_mul_10_big(&big);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(big.bits[5], 4294967286);
+  ck_assert_int_eq(big.bits[6], 9);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
   SRunner *sr = srunner_create(s1);
   suite_add_tcase(s1, tc1_1);
 
+  // s21_set_scale_big
   tcase_add_test(tc1_1, s21_set_scale_big_1);
+
+  // s21_gets_scale_big
+  tcase_add_test(tc1_1, s21_get_scale_big_1);
+
+  // s21_mul_10_big
+  tcase_add_test(tc1_1, s21_mul_10_big_1);
+  tcase_add_test(tc1_1, s21_mul_10_big_2);
+
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
   srunner_ntests_failed(sr);
