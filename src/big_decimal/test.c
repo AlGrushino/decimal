@@ -43,6 +43,34 @@ START_TEST(s21_mul_10_big_2) {
 }
 END_TEST
 
+// s21_div_10_big
+START_TEST(s21_div_10_big_1) {
+  s21_big big = {{0, 0, 0, 0, 10, 0, 0, 0}};
+
+  int res = s21_div_10_big(&big);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(big.bits[4], 1);
+}
+END_TEST
+
+START_TEST(s21_div_10_big_2) {
+  s21_big big = {{0, 0, 0, 0, 0, UINT32_MAX, 0, 0}};
+
+  int res = s21_div_10_big(&big);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(big.bits[4], 2147483648);
+  ck_assert_int_eq(big.bits[5], 429496729);
+
+  res = s21_mul_10_big(&big);
+
+  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(big.bits[4], 0);
+  ck_assert_int_eq(big.bits[5], UINT32_MAX);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -58,6 +86,10 @@ int main(void) {
   // s21_mul_10_big
   tcase_add_test(tc1_1, s21_mul_10_big_1);
   tcase_add_test(tc1_1, s21_mul_10_big_2);
+
+  // s21_div_10_big
+  tcase_add_test(tc1_1, s21_div_10_big_1);
+  tcase_add_test(tc1_1, s21_div_10_big_2);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
