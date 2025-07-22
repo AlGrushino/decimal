@@ -79,6 +79,24 @@ START_TEST(s21_div_10_big_2) {
 }
 END_TEST
 
+// s21_to_big
+START_TEST(s21_to_big_1) {
+  s21_decimal decimal = {{10, 10, 10, 1}};
+  s21_big big = {{0, 0, 0, 0, 0, 0, 0, 0}};
+
+  s21_to_big(&big, &decimal);
+
+  ck_assert_int_eq(big.bits[0], 10);
+  ck_assert_int_eq(big.bits[1], 10);
+  ck_assert_int_eq(big.bits[2], 10);
+  ck_assert_int_eq(big.bits[3], 0);
+  ck_assert_int_eq(big.bits[4], 0);
+  ck_assert_int_eq(big.bits[5], 0);
+  ck_assert_int_eq(big.bits[6], 0);
+  ck_assert_int_eq(big.bits[7], 1);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -99,6 +117,9 @@ int main(void) {
   // s21_div_10_big
   tcase_add_test(tc1_1, s21_div_10_big_1);
   tcase_add_test(tc1_1, s21_div_10_big_2);
+
+  // s21_to_big
+  tcase_add_test(tc1_1, s21_to_big_1);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
