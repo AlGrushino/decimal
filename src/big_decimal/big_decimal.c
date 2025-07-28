@@ -1,5 +1,12 @@
 #include "big_decimal.h"
+/*
+@brief Нормализация big_decimal
 
+@param a s21_big *
+@param b s21_big *
+
+@return int
+*/
 int s21_normalize_scale_big(s21_big* a, s21_big* b) {
   int scale_a = s21_get_scale_big(a);
   int scale_b = s21_get_scale_big(b);
@@ -14,7 +21,7 @@ int s21_normalize_scale_big(s21_big* a, s21_big* b) {
       }
       while (diff != 0 && s21_div_10_big(a) == 0) {
         diff--;
-        scale_b--;
+        scale_b++;
       }
       if (diff != 0) {
         printf("OVERFLOW\n");
@@ -40,7 +47,6 @@ int s21_normalize_scale_big(s21_big* a, s21_big* b) {
   if (!diff) {
     res = 0;
   }
-
   return res;
 }
 

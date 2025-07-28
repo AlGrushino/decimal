@@ -1,8 +1,6 @@
+/*
 @brief Описание
 
 @param аргумент
 @return возвращаемое значение
-
-@brief
-@param
-@return
+*/

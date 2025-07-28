@@ -321,7 +321,6 @@ int s21_normalize_scale(s21_decimal* dec1, s21_decimal* dec2) {
       diff--;
       scale2++;
     }
-
     if (diff != 0) {
       printf("OVERFLOW\n");
       return 1;
@@ -335,7 +334,6 @@ int s21_normalize_scale(s21_decimal* dec1, s21_decimal* dec2) {
       diff++;
       scale1++;
     }
-
     if (diff != 0) {
       printf("OVERFLOW\n");
       return 1;
