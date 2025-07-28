@@ -69,3 +69,18 @@ gcov_big_decimal: test_big_decimal
 	@gcovr --html-self-contained --html-details -o logs/report.html
 	@echo "Building report..."
 	@open logs/report.html
+
+other.o: other/s21_other.c
+	@$(CC) $(CFLAGS) -c other/s21_other.c
+
+test_other: other.o bit_operations.o
+	@rm -rf test
+	@$(CC) $(CFLAGS) $(GCOV) other/test.c other/s21_other.c bit_operations.o $(CLIBS) -o test
+	@./test
+
+gcov_other: test_other
+	@rm -rf test-test.gcda test-test.gcno
+	@mkdir logs
+	@gcovr --html-self-contained --html-details -o logs/report.html
+	@echo "Building report..."
+	@open logs/report.html

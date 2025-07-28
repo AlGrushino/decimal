@@ -1,5 +1,5 @@
 #include <check.h>
-#include <limits.h>  // проверить, можно ли его использовать
+#include <limits.h>
 
 #include "s21_comparison.h"
 
