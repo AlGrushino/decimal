@@ -422,6 +422,43 @@ START_TEST(s21_is_equal_big_16) {
 }
 END_TEST
 
+// s21_is_less_big
+START_TEST(s21_is_less_big_1) {
+  s21_big a = {{10, 10, 10, 10, 10, 10, 0, 0}};
+  s21_big b = {{10, 10, 10, 10, 10, 10, 10, 0}};
+
+  int res = s21_is_less_big(&a, &b);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_is_less_big_2) {
+  s21_big a = {{10, 10, 10, 10, 10, 10, 0, 0}};
+  s21_big b = {{10, 10, 10, 10, 10, 9, 10, 0}};
+
+  int res = s21_is_less_big(&a, &b);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_is_less_big_3) {
+  s21_big a = {{10, 10, 10, 10, 10, 10, 0, 0}};
+  s21_big b = {{9, 10, 10, 10, 10, 9, 10, 0}};
+
+  int res = s21_is_less_big(&a, &b);
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_is_less_big_4) {
+  s21_big a = {{10, 10, 10, 10, 10, 10, 10, 0}};
+  s21_big b = {{10, 10, 10, 10, 10, 10, 0, 0}};
+
+  int res = s21_is_less_big(&a, &b);
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -474,6 +511,12 @@ int main(void) {
   tcase_add_test(tc1_1, s21_is_equal_big_14);
   tcase_add_test(tc1_1, s21_is_equal_big_15);
   tcase_add_test(tc1_1, s21_is_equal_big_16);
+
+  // s21_is_less_big
+  tcase_add_test(tc1_1, s21_is_less_big_1);
+  tcase_add_test(tc1_1, s21_is_less_big_2);
+  tcase_add_test(tc1_1, s21_is_less_big_3);
+  tcase_add_test(tc1_1, s21_is_less_big_4);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);

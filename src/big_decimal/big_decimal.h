@@ -20,5 +20,6 @@ int s21_mul_10_big(s21_big* big);
 int s21_div_10_big(s21_big* big);
 void s21_to_big(s21_big* big, s21_decimal* decimal);
 int s21_is_equal_big(s21_big* a, s21_big* b);
+int s21_is_less_big(s21_big* a, s21_big* b);
 
 #endif

@@ -119,3 +119,13 @@ int s21_is_equal_big(s21_big* a, s21_big* b) {
          a->bits[4] == b->bits[4] && a->bits[5] == b->bits[5] &&
          a->bits[6] == b->bits[6] && a->bits[7] == b->bits[7];
 }
+
+int s21_is_less_big(s21_big* a, s21_big* b) {
+  int res = false;
+
+  for (int i = 6; !res && i >= 0; i--) {
+    res = a->bits[i] < b->bits[i];
+  }
+
+  return res;
+}
