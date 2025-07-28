@@ -82,44 +82,42 @@ int s21_is_equal(s21_decimal a, s21_decimal b) {
 @param s21_decimal two
 @return int 1 - числа равны друг другу, 0 - числа не равны друг другу
 */
-int s21_is_not_equal(s21_decimal one, s21_decimal two) {
-  return !s21_is_equal(one, two);
+int s21_is_not_equal(s21_decimal a, s21_decimal b) {
+  return !s21_is_equal(a, b);
 }
 
-// писал несколько дней назад, не помню, готова ли, пришли новые гениальные идеи
-// в голову, пока что оставлю так
 int s21_is_less(s21_decimal a, s21_decimal b) {
-  int res = s21_compare_sign(&a, &b);
+  bool res = false;
 
-  if (res) {
-    s21_normalize_scale(&a, &b);
+  if (s21_is_not_equal(a, b)) {
+    // -+
+    if (s21_get_sign(&a) && !s21_get_sign(&b)) {
+      res = true;
+    } else if (s21_get_sign(&a) == s21_get_sign(&b))
+    // --
+    // ++
+    {
+      s21_big big_a = {0};
+      s21_big big_b = {0};
+      s21_to_big(&big_a, &a);
+      s21_to_big(&big_b, &b);
 
-    int sign1 = s21_get_sign(&a);
-    int sign2 = s21_get_sign(&b);
-    int rez = sign1 > sign2;
+      int norm_res = s21_normalize_scale_big(&big_a, &big_b);
 
-    for (int i = 2; i >= 0 && rez == 0; i--) {
-      rez = a.bits[i] < b.bits[i];
-    }
-  } else {
-    int sign_a = s21_get_sign(&a);
-    int sign_b = s21_get_sign(&b);
-
-    if (sign_a && !sign_b) {
-      res = 1;
-    } else {
-      res = 0;
+      if (!norm_res) {
+        res = s21_is_less_big(&big_a, &big_b);
+      }
     }
   }
   return res;
 }
 
-// int s21_is_greater(s21_decimal one, s21_decimal two) {}
+int s21_is_greater(s21_decimal a, s21_decimal b) { return !s21_is_less(a, b); }
 
-// int s21_is_greater_or_equal(s21_decimal one, s21_decimal two) {
-//   return s21_is_greater(one, two) || s21_is_equal(one, two);
-// }
+int s21_is_greater_or_equal(s21_decimal a, s21_decimal b) {
+  return s21_is_greater(a, b) || s21_is_equal(a, b);
+}
 
-// int s21_is_less(s21_decimal one, s21_decimal two) {
-//   return !s21_is_greater(one, two);
-// }
+int s21_is_less_or_equal(s21_decimal a, s21_decimal b) {
+  return s21_is_less(a, b) || s21_is_equal(a, b);
+}

@@ -327,6 +327,129 @@ START_TEST(s21_is_not_equal_2) {
 }
 END_TEST
 
+// s21_is_less
+START_TEST(s21_is_less_1) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_less_2) {
+  s21_decimal a = {{0, 0, 0, 0}};
+  s21_decimal b = {{0, 0, 0, 0}};
+
+  s21_decimal_set_sign(&a);
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_less_3) {
+  s21_decimal a = {{10, 0, 0, 0}};
+  s21_decimal b = {{10, 0, 0, 0}};
+
+  s21_decimal_set_sign(&a);
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+START_TEST(s21_is_less_4) {
+  s21_decimal a = {{10, 0, 0, 0}};
+  s21_decimal b = {{10, 0, 0, 0}};
+
+  s21_decimal_set_sign(&b);
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+// --
+// =
+START_TEST(s21_is_less_5) {
+  s21_decimal a = {{10, 0, 0, 0}};
+  s21_decimal b = {{10, 0, 0, 0}};
+
+  s21_decimal_set_sign(&a);
+  s21_decimal_set_sign(&b);
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+// <
+START_TEST(s21_is_less_6) {
+  s21_decimal a = {{1, 0, 0, 0}};
+  s21_decimal b = {{10, 0, 0, 0}};
+
+  s21_decimal_set_sign(&a);
+  s21_decimal_set_sign(&b);
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+// >
+START_TEST(s21_is_less_7) {
+  s21_decimal a = {{10, 0, 0, 0}};
+  s21_decimal b = {{1, 0, 0, 0}};
+
+  s21_decimal_set_sign(&a);
+  s21_decimal_set_sign(&b);
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+// ++
+// =
+START_TEST(s21_is_less_8) {
+  s21_decimal a = {{10, 0, 0, 0}};
+  s21_decimal b = {{10, 0, 0, 0}};
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+// <
+START_TEST(s21_is_less_9) {
+  s21_decimal a = {{1, 0, 0, 0}};
+  s21_decimal b = {{10, 0, 0, 0}};
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 1);
+}
+END_TEST
+
+// >
+START_TEST(s21_is_less_10) {
+  s21_decimal a = {{10, 0, 0, 0}};
+  s21_decimal b = {{1, 0, 0, 0}};
+
+  int res = s21_is_less(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
 int main(void) {
   Suite *s1 = suite_create("Core");
   TCase *tc1_1 = tcase_create("Core");
@@ -376,6 +499,18 @@ int main(void) {
   // s21_is_not_equal
   tcase_add_test(tc1_1, s21_is_not_equal_1);
   tcase_add_test(tc1_1, s21_is_not_equal_2);
+
+  // s21_is_less
+  tcase_add_test(tc1_1, s21_is_less_1);
+  tcase_add_test(tc1_1, s21_is_less_2);
+  tcase_add_test(tc1_1, s21_is_less_3);
+  tcase_add_test(tc1_1, s21_is_less_4);
+  tcase_add_test(tc1_1, s21_is_less_5);
+  tcase_add_test(tc1_1, s21_is_less_6);
+  tcase_add_test(tc1_1, s21_is_less_7);
+  tcase_add_test(tc1_1, s21_is_less_8);
+  tcase_add_test(tc1_1, s21_is_less_9);
+  tcase_add_test(tc1_1, s21_is_less_10);
 
   srunner_set_fork_status(sr, CK_NOFORK);
   srunner_run_all(sr, CK_ENV);
