@@ -43,9 +43,9 @@ gcov_bit_operations: test_bit_operations
 comparison.o: comparison/s21_comparison.c
 	@$(CC) $(CFLAGS) -c comparison/s21_comparison.c
 
-test_comparison: comparison.o bit_operations.o
+test_comparison: comparison.o bit_operations.o big_decimal.o
 	@rm -rf test
-	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c bit_operations.o $(CLIBS) -o test
+	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c bit_operations.o big_decimal.o $(CLIBS) -o test
 	@./test
 
 gcov_comparison: test_comparison

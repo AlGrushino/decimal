@@ -49,6 +49,7 @@ int s21_normalize_scale_big(s21_big* a, s21_big* b) {
   }
   return res;
 }
+// мб стоит добавить в нормализацию проверку, что скейл не выходит за 28 и 0
 
 void s21_set_scale_big(s21_big* big, unsigned int scale) {
   fields field;
@@ -110,4 +111,11 @@ void s21_to_big(s21_big* big, s21_decimal* decimal) {
   big->bits[1] = decimal->bits[1];
   big->bits[2] = decimal->bits[2];
   big->bits[7] = decimal->bits[3];
+}
+
+int s21_is_equal_big(s21_big* a, s21_big* b) {
+  return a->bits[0] == b->bits[0] && a->bits[1] == b->bits[1] &&
+         a->bits[2] == b->bits[2] && a->bits[3] == b->bits[3] &&
+         a->bits[4] == b->bits[4] && a->bits[5] == b->bits[5] &&
+         a->bits[6] == b->bits[6] && a->bits[7] == b->bits[7];
 }
