@@ -14,7 +14,7 @@ endif
 all: s21_decimal.a
 
 clean:
-	@rm -rf *.o *.gcno *.gcda *.gcov *.a test logs
+	@rm -rf *.o *.gcno *.gcda *.gcov *.a test logs *.out
 
 # s21_decimal.a: clean s21_arithmetic.o s21_comparison.o s21_converters.o s21_other.o
 # 	$(CC) $(CFLAGS) -c 
