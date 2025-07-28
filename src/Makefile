@@ -24,14 +24,8 @@ s21_decimal.a: clean s21_arithmetic.o s21_comparison.o s21_converters.o s21_othe
 
 
 # bit_operations
-# bit_operations.a:
-# 	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
-# 	ar rcs bit_operations.a
-
-bit_operations.a:
-	$(CC) $(CFLAGS) -c bit_operations/bit_operations.c -o bit_operations.o
-	ar rcs bit_operations.a bit_operations.o
-
+bit_operations.o: bit_operations/bit_operations.c
+	@$(CC) $(CFLAGS) -c bit_operations/bit_operations.c
 
 test_bit_operations:
 	@rm -rf test
@@ -61,13 +55,12 @@ gcov_bit_operations: test_bit_operations
 	@open logs/report.html
 
 # comparison
-comparison.a:
-	$(CC) $(CFLAGS) -c comparison/s21_comparison.c
-	ar rcs comparison.a
+comparison.o: comparison/s21_comparison.c
+	@$(CC) $(CFLAGS) -c comparison/s21_comparison.c
 
-test_comparison:
+test_comparison: comparison.o bit_operations.o
 	@rm -rf test
-	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c $(CLIBS) -o test
+	@$(CC) $(CFLAGS) $(GCOV) comparison/test.c comparison/s21_comparison.c bit_operations.o $(CLIBS) -o test
 	@./test
 
 gcov_comparison: test_comparison
@@ -77,7 +70,15 @@ gcov_comparison: test_comparison
 	@echo "Building report..."
 	@open logs/report.html
 
-gcov_other: test_other
+big_decimal.o: big_decimal/big_decimal.c
+	@$(CC) $(CFLAGS) -c big_decimal/big_decimal.c
+
+test_big_decimal: big_decimal.o bit_operations.o
+	@rm -rf test
+	@$(CC) $(CFLAGS) $(GCOV) big_decimal/test.c big_decimal/big_decimal.c bit_operations.o $(CLIBS) -o test
+	@./test
+
+gcov_big_decimal: test_big_decimal
 	@rm -rf test-test.gcda test-test.gcno
 	@mkdir logs
 	@gcovr --html-self-contained --html-details -o logs/report.html

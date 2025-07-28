@@ -5,80 +5,47 @@
 
 @param one s21_decimal
 @param two s21_decimal
-@return int 1 - числа равны, 0 - числа не равны
+@return int 1 - числа равны, 0 - числа неравны
 */
-int s21_is_equal(s21_decimal one, s21_decimal two) {
-  compare_res res = FALSE;
+// int s21_is_equal(s21_decimal one, s21_decimal two) {
+//   bool res = false;
 
-  // убрать последние нули, эту функцию нужно реализовать
-  // s21_remove_zeroes();
-  // s21_decimal one_no_zeroes = s21_remove_zeroes(one);
-  // s21_decimal two_no_zeroes = s21_remove_zeroes(two);
+//   // убрать последние нули, эту функцию нужно реализовать
+//   // s21_remove_zeroes();
+//   // s21_decimal one_no_zeroes = s21_remove_zeroes(one);
+//   // s21_decimal two_no_zeroes = s21_remove_zeroes(two);
 
-  // // сравнить на ноль
-  // if (TRUE == s21_compare_to_zero(one_no_zeroes) &&
-  //     TRUE == s21_compare_to_zero(two_no_zeroes)) {
-  //   res = TRUE;
-  // }
-  // сравнить если не ноль
-  // сравнить знаки
-  // if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes, two_no_zeroes))
-  // {
-  if (FALSE == res && TRUE == s21_compare_sign(one, two)) {
-    res = TRUE;
-  }
+//   // // сравнить на ноль
+//   // if (TRUE == s21_compare_to_zero(one_no_zeroes) &&
+//   //     TRUE == s21_compare_to_zero(two_no_zeroes)) {
+//   //   res = TRUE;
+//   // }
+//   // сравнить если не ноль
+//   // сравнить знаки
+//   // if (FALSE == res && TRUE == s21_compare_sign(one_no_zeroes,
+//   two_no_zeroes))
+//   // {
+//   if (false == res && true == s21_compare_sign(one, two)) {
+//     res = true;
+//   }
 
-  return (int)res;
-}
+//   return (int)res;
+// }
 
-/*
-@brief Сравнивает два числа s21_decimal без учёта последнего инта
-
-@param one s21_decimal
-@param two s21_decimal
-@return int 1 - числа равны, 0 - числа не равны
-*/
-int s21_compare_num(s21_decimal one, s21_decimal two) {
-  compare_res res = FALSE;
-
-  if (one.bits[0] == two.bits[0] && one.bits[1] == two.bits[1] &&
-      one.bits[2] == two.bits[2]) {
-    res = TRUE;
-  }
-
-  return (int)res;
-}
-
-/*
-@brief Сравнивает знаки двух числе s21_decimal
-
-@param one s21_decimal
-@param two s21_decimal
-@return int 1 - знаки равны, 0 - числа не равны
-*/
-int s21_compare_sign(s21_decimal one, s21_decimal two) {
-  compare_res res = FALSE;
-
-  if (s21_get_sign(one) == s21_get_sign(two)) {
-    res = TRUE;
-  }
-
-  return (int)res;
-}
-
-/*
-@brief Сравнивает, равны ли два числа нулю
-
-@param one s21_decimal
-@param two s21_decimal
-@return int 1 - оба числа равны нулю, 0 - не оба числа равны нулю
-*/
-// переписать эту функцию на int s21_equal_to_zero(s21_decimal);
-int s21_compare_to_zero(s21_decimal one) {
-  compare_res res = FALSE;
-
-  if (0 == one.bits[0] && 0 == one.bits[1] && 0 == one.bits[2]) {
-    res = TRUE;
+int s21_is_equal(s21_decimal a, s21_decimal b) {
+  int res = s21_compare_sign(&a, &b);
+  // пробема в том, что нормализация может не сработать, а мантисы одинаковые у
+  // децималов, поэтому сравнение может сработать
+  // либо чекать ошибку нормализации, либо сравнивать все 4 числа в структуре
+  // децимала
+  // if (res) {
+  //   res = s21_normalize_scale(&a, &b);
+  //   if (!res) {
+  //     res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
+  //   }
+  if (res) {
+    s21_normalize_scale(&a, &b);
+    res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
   }
 
   return res;
@@ -91,9 +58,37 @@ int s21_compare_to_zero(s21_decimal one) {
 @param s21_decimal two
 @return int 1 - числа равны друг другу, 0 - числа не равны друг другу
 */
-// int s21_is_not_equal(s21_decimal one, s21_decimal two) {
-//   return !s21_is_equal(one, two);
-// }
+int s21_is_not_equal(s21_decimal one, s21_decimal two) {
+  return !s21_is_equal(one, two);
+}
+
+// писал несколько дней назад, не помню, готова ли, пришли новые гениальные идеи
+// в голову, пока что оставлю так
+int s21_is_less(s21_decimal a, s21_decimal b) {
+  int res = s21_compare_sign(&a, &b);
+
+  if (res) {
+    s21_normalize_scale(&a, &b);
+
+    int sign1 = s21_get_sign(&a);
+    int sign2 = s21_get_sign(&b);
+    int rez = sign1 > sign2;
+
+    for (int i = 2; i >= 0 && rez == 0; i--) {
+      rez = a.bits[i] < b.bits[i];
+    }
+  } else {
+    int sign_a = s21_get_sign(&a);
+    int sign_b = s21_get_sign(&b);
+
+    if (sign_a && !sign_b) {
+      res = 1;
+    } else {
+      res = 0;
+    }
+  }
+  return res;
+}
 
 // int s21_is_greater(s21_decimal one, s21_decimal two) {}
 
