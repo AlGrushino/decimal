@@ -32,22 +32,46 @@
 //   return (int)res;
 // }
 
-int s21_is_equal(s21_decimal a, s21_decimal b) {
-  int res = s21_compare_sign(&a, &b);
-  // пробема в том, что нормализация может не сработать, а мантисы одинаковые у
-  // децималов, поэтому сравнение может сработать
-  // либо чекать ошибку нормализации, либо сравнивать все 4 числа в структуре
-  // децимала
-  // if (res) {
-  //   res = s21_normalize_scale(&a, &b);
-  //   if (!res) {
-  //     res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
-  //   }
-  if (res) {
-    s21_normalize_scale(&a, &b);
-    res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
-  }
+// int s21_is_equal(s21_decimal a, s21_decimal b) {
+//   int res = s21_compare_sign(&a, &b);
+//   // пробема в том, что нормализация может не сработать, а мантисы одинаковые
+//   у
+//   // децималов, поэтому сравнение может сработать
+//   // либо чекать ошибку нормализации, либо сравнивать все 4 числа в структуре
+//   // децимала
+//   // if (res) {
+//   //   res = s21_normalize_scale(&a, &b);
+//   //   if (!res) {
+//   //     res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
+//   //   }
+//   if (res) {
+//     s21_normalize_scale(&a, &b);
+//     res = s21_compare_nums(&a, &b) && a.bits[3] == b.bits[3];
+//   }
 
+//   return res;
+// }
+
+int s21_is_equal(s21_decimal a, s21_decimal b) {
+  bool res = false;
+
+  if (s21_compare_to_zero(&a) && s21_compare_to_zero(&b)) {
+    res = true;
+  } else {
+    s21_big big_a = {0};
+    s21_big big_b = {0};
+
+    s21_to_big(&big_a, &a);
+    s21_to_big(&big_b, &b);
+
+    // мб можно убрать эту переменную
+    int norm_res = s21_normalize_scale_big(&big_a, &big_b);
+
+    // как и это условие
+    if (!norm_res) {
+      res = s21_is_equal_big(&big_a, &big_b);
+    }
+  }
   return res;
 }
 

@@ -1,6 +1,7 @@
 #ifndef S21_COMPARISON_H
 #define S21_COMPARISON_H
 
+#include "../big_decimal/big_decimal.h"
 #include "../bit_operations/bit_operations.h"
 #include "../something.h"
 #include "stdbool.h"

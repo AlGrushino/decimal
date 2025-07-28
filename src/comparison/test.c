@@ -238,7 +238,7 @@ START_TEST(s21_is_equal_2) {
 
   ck_assert_int_eq(sign_a, 1);
   ck_assert_int_eq(sign_b, 0);
-  ck_assert_int_eq(res, 0);
+  ck_assert_int_eq(res, 1);
 }
 END_TEST
 
@@ -259,6 +259,46 @@ START_TEST(s21_is_equal_4) {
   s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
 
   s21_set_scale(&a, 28);
+
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_equal_5) {
+  s21_decimal a = {{UINT32_MAX - 1, UINT32_MAX, UINT32_MAX, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_equal_6) {
+  s21_decimal a = {{UINT32_MAX, UINT32_MAX - 1, UINT32_MAX, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_equal_7) {
+  s21_decimal a = {{UINT32_MAX, UINT32_MAX, UINT32_MAX - 1, 0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
+
+  int res = s21_is_equal(a, b);
+
+  ck_assert_int_eq(res, 0);
+}
+END_TEST
+
+START_TEST(s21_is_equal_8) {
+  s21_decimal a = {{0}};
+  s21_decimal b = {{UINT32_MAX, UINT32_MAX, UINT32_MAX, 0}};
 
   int res = s21_is_equal(a, b);
 
@@ -328,6 +368,10 @@ int main(void) {
   tcase_add_test(tc1_1, s21_is_equal_2);
   tcase_add_test(tc1_1, s21_is_equal_3);
   tcase_add_test(tc1_1, s21_is_equal_4);
+  tcase_add_test(tc1_1, s21_is_equal_5);
+  tcase_add_test(tc1_1, s21_is_equal_6);
+  tcase_add_test(tc1_1, s21_is_equal_7);
+  tcase_add_test(tc1_1, s21_is_equal_8);
 
   // s21_is_not_equal
   tcase_add_test(tc1_1, s21_is_not_equal_1);
